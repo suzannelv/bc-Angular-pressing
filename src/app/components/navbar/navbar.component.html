@@ -1,0 +1,75 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg z-3" id="mainNa v">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/home"
+      ><img src="assets/logo.svg" alt="logo"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarResponsive"
+      aria-controls="navbarResponsive"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars ms-1"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home">Accueil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/services">Nos services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about">A props</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" routerLink="/auth"></a></li>
+
+        <!-- user login/logout/inscription -->
+        <div class="flex-shrink-0 dropdown">
+          <a
+            href="#"
+            class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              [src]="profilImage"
+              alt="user avatar default"
+              class="rounded-circle"
+            />
+          </a>
+
+          <ul class="dropdown-menu text-small shadow">
+            <li><a class="dropdown-item" href="#">Mon compte</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/auth">Se connecter</a>
+            </li>
+            <li><a class="dropdown-item" href="#">Déconnecter</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" routerLink="/register"
+                >Pas de compte? <br />
+                Inscrivez-vous</a
+              >
+            </li>
+          </ul>
+        </div>
+        <li class="nav-item ms-3">
+          <a class="nav-link" routerLink="/cart">
+            <i
+              class="fa-solid fa-cart-shopping text-warning fs-5 position-relative"
+              ><span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+                >0</span
+              ></i
+            >
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
