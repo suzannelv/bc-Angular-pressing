@@ -10,11 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './auth.component.css',
 })
 export class AuthComponent {
-  constructor(
-    private authService: AuthService,
-    private app: AppComponent,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
   onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
@@ -23,6 +19,7 @@ export class AuthComponent {
     const password = form.value.password;
 
     this.authService.login(email, password).subscribe((res) => {
+      console.log(res.token);
       this.authService.storeToken(res.token);
       this.router.navigate(['/home']);
     });

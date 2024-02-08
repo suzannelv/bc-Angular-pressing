@@ -3,24 +3,49 @@
     <div class="image-holder">
       <img src="assets/register/bg-register2.svg" alt />
     </div>
-    <form>
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
       <h3>Inscrivez-vous</h3>
       <div class="form-group">
-        <input type="text" placeholder="Prénom" class="form-control" />
-        <input type="text" placeholder="Nom" class="form-control" />
+        <input
+          type="text"
+          placeholder="Prénom"
+          class="form-control"
+          name="firstname"
+          ngModel
+          required
+        />
+        <input
+          type="text"
+          placeholder="Nom"
+          class="form-control"
+          name="lastname"
+          ngModel
+          required
+        />
       </div>
-      <div class="form-wrapper">
-        <input type="text" placeholder="Pseudo" class="form-control" />
+
+      <div class="">
+        <input type="file" class="form-control" name="profilUrl" />
       </div>
+
       <div class="form-wrapper">
         <input
           type="date"
           placeholder="Date de naissace"
           class="form-control"
+          name="birthday"
+          ngModel
         />
       </div>
       <div class="form-wrapper">
-        <input type="text" placeholder="Email" class="form-control" />
+        <input
+          type="text"
+          placeholder="Email"
+          class="form-control"
+          name="email"
+          ngModel
+          required
+        />
         <i class="fa-regular fa-envelope"></i>
       </div>
 
@@ -29,6 +54,9 @@
           type="password"
           placeholder="Mot de passe"
           class="form-control"
+          name="password"
+          ngModel
+          required
         />
         <i class="fa-solid fa-lock"></i>
       </div>
@@ -41,18 +69,45 @@
         <i class="fa-solid fa-lock"></i>
       </div> -->
       <div class="form-wrapper">
-        <input type="text" placeholder="Téléphone" class="form-control" />
+        <input
+          type="text"
+          placeholder="Téléphone"
+          class="form-control"
+          name="phoneNumber"
+          ngModel
+          required
+        />
         <i class="fa-solid fa-phone-flip"></i>
       </div>
       <div class="form-wrapper">
-        <input type="text" placeholder="Adresse" class="form-control" />
+        <input
+          type="text"
+          placeholder="Adresse"
+          class="form-control"
+          name="adress"
+          ngModel
+          required
+        />
         <i class="fa-solid fa-location-dot"></i>
       </div>
       <div class="form-wrapper">
-        <input type="text" placeholder="Code postale" class="form-control" />
-        <input type="text" placeholder="Ville" class="form-control" />
+        <input
+          type="text"
+          placeholder="Code postale"
+          class="form-control"
+          name="zipCode"
+          ngModel
+          required
+        />
+        <input
+          type="text"
+          placeholder="Ville"
+          class="form-control"
+          ngModel
+          required
+        />
       </div>
-      <button>Confirmer</button>
+      <button type="submit">Confirmer</button>
     </form>
   </div>
 </div>

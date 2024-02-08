@@ -1,0 +1,19 @@
+.title_actu {
+  top: 10%;
+  left: 15%;
+}
+.title_actu small {
+  font-size: 12px;
+  display: block;
+  text-align: end;
+}
+.actu_date {
+  background-color: rgba(0, 0, 0, 0.3);
+  margin-top: -15%;
+}
+.min-separator {
+  height: 5px;
+  width: 50%;
+  border-radius: 2.5px;
+  background-color: #fff;
+}

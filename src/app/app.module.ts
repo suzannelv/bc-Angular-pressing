@@ -20,6 +20,10 @@ import { ServiceListComponent } from './views/service-list/service-list.componen
 import { CommitmentComponent } from './views/home/commitment/commitment.component';
 import { PresentationComponent } from './views/home/presentation/presentation.component';
 import { RegistrationComponent } from './views/registration/registration.component';
+import { CarouselComponent } from './views/home/carousel/carousel.component';
+import { ChoosingUsComponent } from './views/home/choosing-us/choosing-us.component';
+import { FoundersComponent } from './views/home/founders/founders.component';
+import { NewsComponent } from './views/home/news/news.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,10 @@ import { RegistrationComponent } from './views/registration/registration.compone
     CommitmentComponent,
     PresentationComponent,
     RegistrationComponent,
+    CarouselComponent,
+    ChoosingUsComponent,
+    FoundersComponent,
+    NewsComponent,
   ],
   imports: [
     BrowserModule,

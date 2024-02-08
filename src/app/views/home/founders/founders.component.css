@@ -1,0 +1,9 @@
+#fonder .cover {
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+  bottom: -1000px;
+  transition: all ease 0.5s;
+}
+#fonder .fonders:hover .cover {
+  bottom: 0px;
+}

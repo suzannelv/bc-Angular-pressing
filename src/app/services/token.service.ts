@@ -13,6 +13,12 @@ export class TokenService {
     localStorage.setItem('token', token);
   }
 
+  isLogged(): boolean {
+    const token = localStorage.getItem('token');
+    console.log(token);
+    return !!token;
+  }
+
   getToken(): string | null {
     return this.token || localStorage.getItem('token');
   }

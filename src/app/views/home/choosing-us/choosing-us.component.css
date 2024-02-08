@@ -1,0 +1,17 @@
+#achievement .bg-logo {
+  background-image: url(../../../../assets/home/bg-choosing.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.achievement-category .quality-item strong {
+  font-size: 26px;
+  color: var(--primary-color);
+}
+.achievement-category .quality-item p {
+  color: rgb(116, 116, 116);
+  font-size: 14px;
+  font-weight: 700;
+}
+.key_word {
+  background-color: rgba(241, 200, 65, 0.2);
+}
