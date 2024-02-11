@@ -16,14 +16,16 @@ import { HeaderComponent } from './views/home/header/header.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { CartComponent } from './views/cart/cart.component';
 import { AuthComponent } from './views/auth/auth.component';
-import { ServiceListComponent } from './views/service-list/service-list.component';
+
 import { CommitmentComponent } from './views/home/commitment/commitment.component';
 import { PresentationComponent } from './views/home/presentation/presentation.component';
 import { RegistrationComponent } from './views/registration/registration.component';
-import { CarouselComponent } from './views/home/carousel/carousel.component';
 import { ChoosingUsComponent } from './views/home/choosing-us/choosing-us.component';
 import { FoundersComponent } from './views/home/founders/founders.component';
 import { NewsComponent } from './views/home/news/news.component';
+import { PrestationsComponent } from './views/home/prestations/prestations.component';
+import { CategoryComponent } from './views/category/category.component';
+import { ProductComponent } from './views/product/product.component';
 
 @NgModule({
   declarations: [
@@ -37,14 +39,16 @@ import { NewsComponent } from './views/home/news/news.component';
     NotFoundComponent,
     CartComponent,
     AuthComponent,
-    ServiceListComponent,
+
     CommitmentComponent,
     PresentationComponent,
     RegistrationComponent,
-    CarouselComponent,
     ChoosingUsComponent,
     FoundersComponent,
     NewsComponent,
+    PrestationsComponent,
+    CategoryComponent,
+    ProductComponent,
   ],
   imports: [
     BrowserModule,

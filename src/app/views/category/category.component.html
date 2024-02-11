@@ -1,0 +1,52 @@
+<section class="container-fluid bg-service p-0">
+  <img src="assets/service-page/bg-service.svg" alt="background page service" />
+</section>
+
+<section class="category-list container mt-5" *ngIf="parentCategories">
+  <ul class="mb-3 d-flex justify-content-between" id="pills-tab" role="tablist">
+    <li class="" role="presentation" *ngFor="let category of parentCategories">
+      <a
+        class="tab-border-bottom"
+        [id]="'pills-' + category.id + '-tab'"
+        data-bs-toggle="pill"
+        [attr.data-bs-target]="'#pills-' + category.id"
+        type="button"
+        role="tab"
+        [attr.aria-controls]="'pills-' + category.id"
+        (click)="setActiveTab(category.id)"
+        [ngClass]="{
+          'active-tab': category.id === activeTabId,
+          'inactive-tab': category.id !== activeTabId
+        }"
+      >
+        <h3>{{ category.name }}</h3>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Contenu des onglets -->
+  <div class="row">
+    <div class="tab-content col-lg-2" id="pills-tabContent">
+      <div
+        class="tab-pane fade show"
+        [class.active]="category.id === activeTabId"
+        *ngFor="let category of parentCategories"
+        [id]="'pills-' + category.id"
+        role="tabpanel"
+        [attr.aria-labelledby]="'pills-' + category.id + '-tab'"
+        tabindex="0"
+      >
+        <!-- Contenu pour la catégorie spécifique -->
+        <ul>
+          <li *ngFor="let child of category.child">
+            <a (click)="getSubCategory(child)">{{ child.name }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-10">
+      <app-product [categoryId]="selectedCategoryId"></app-product>
+    </div>
+  </div>
+</section>

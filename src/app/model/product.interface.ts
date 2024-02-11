@@ -10,3 +10,7 @@ export interface ProductInterface {
   productStatus: ProductStatusInterface;
   imagePath: string;
 }
+
+export interface ProductResponse {
+  'hydra:member': ProductInterface[];
+}

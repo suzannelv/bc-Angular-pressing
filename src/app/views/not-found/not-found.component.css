@@ -1,0 +1,13 @@
+.full-height {
+  background-image: url(../../../assets/bg-notFound.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+h1 {
+  width: 100%;
+  height: 1000px;
+  text-align: center;
+  transform: translateY(50%);
+}
