@@ -13,4 +13,9 @@ export interface ProductInterface {
 
 export interface ProductResponse {
   'hydra:member': ProductInterface[];
+  'hydra:view': {
+    'hydra:first': string;
+    'hydra:last': string;
+    'hydra:next'?: string;
+  };
 }

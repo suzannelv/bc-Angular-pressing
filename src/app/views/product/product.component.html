@@ -1,1 +1,12 @@
-<p>product works!</p>
+<div *ngIf="isLoading">
+  <app-load-spinner></app-load-spinner>
+</div>
+
+<div *ngIf="!isLoading">
+  <div *ngFor="let product of products">
+    <img [src]="product.imagePath" alt="产品图片" />
+    <h3>{{ product.name }}</h3>
+    <p>价格: {{ product.price }}</p>
+    <p>描述: {{ product.description }}</p>
+  </div>
+</div>

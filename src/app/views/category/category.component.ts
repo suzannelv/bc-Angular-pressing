@@ -60,6 +60,5 @@ export class CategoryComponent implements OnInit {
 
   getSubCategory(child: { id: number; name: string }) {
     this.selectedCategoryId = child.id;
-    console.log(this.selectedCategoryId);
   }
 }
