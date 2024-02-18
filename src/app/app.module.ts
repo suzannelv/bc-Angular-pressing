@@ -27,6 +27,7 @@ import { PrestationsComponent } from './views/home/prestations/prestations.compo
 import { CategoryComponent } from './views/category/category.component';
 import { ProductComponent } from './views/product/product.component';
 import { LoadSpinnerComponent } from './components/load-spinner/load-spinner.component';
+import { ProductDetailComponent } from './views/product/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { LoadSpinnerComponent } from './components/load-spinner/load-spinner.com
     CategoryComponent,
     ProductComponent,
     LoadSpinnerComponent,
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,

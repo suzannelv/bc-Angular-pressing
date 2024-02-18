@@ -1,0 +1,43 @@
+<section class="container">
+  <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Accueil</a></li>
+      <li class="breadcrumb-item" aria-current="page">
+        {{ product?.name }}
+      </li>
+    </ol>
+  </nav>
+
+  <div class="row mb-4 h-md-250 position-relative">
+    <div class="col-lg-6">
+      <img [src]="product?.imagePath" alt="" class="img-fluid" />
+    </div>
+    <div class="col-lg-6 p-4 d-flex flex-column position-static">
+      <strong class="d-inline-block mb-2 text-primary-emphasis">{{
+        product?.category?.name
+      }}</strong>
+      <h3 class="mb-0">{{ product?.name }}</h3>
+
+      <p class="card-text">
+        {{ product?.description }}
+      </p>
+
+      <h4 class="fs-5">Services supplémentaire</h4>
+      <form>
+        <div *ngFor="let option of options" class="d-flex">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              [id]="option.name"
+            />
+            <label class="form-check-label" [for]="option.name">
+              {{ option.name }}
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

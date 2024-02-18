@@ -2,8 +2,16 @@
   <img src="assets/service-page/bg-service.svg" alt="background page service" />
 </section>
 
+<!-- <div *ngIf="isLoading">
+  <app-load-spinner></app-load-spinner>
+</div> -->
+
 <section class="category-list container mt-5" *ngIf="parentCategories">
-  <ul class="mb-3 d-flex justify-content-between" id="pills-tab" role="tablist">
+  <ul
+    class="mb-3 d-flex justify-content-between flex-wrap"
+    id="pills-tab"
+    role="tablist"
+  >
     <li class="" role="presentation" *ngFor="let category of parentCategories">
       <a
         class="tab-border-bottom"
@@ -38,8 +46,16 @@
       >
         <!-- Contenu pour la catégorie spécifique -->
         <ul>
-          <li *ngFor="let child of category.child">
-            <a (click)="getSubCategory(child)">{{ child.name }}</a>
+          <li *ngFor="let child of category.child" class="m-2">
+            <a
+              (click)="getSubCategory(child)"
+              [ngClass]="{
+                'sub-category-selected': child.id === activeChildTabId,
+                subcategory: child.id !== activeChildTabId
+              }"
+            >
+              {{ child.name }}
+            </a>
           </li>
         </ul>
       </div>

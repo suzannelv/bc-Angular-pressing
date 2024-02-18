@@ -7,11 +7,13 @@ import { AuthComponent } from './views/auth/auth.component';
 import { CartComponent } from './views/cart/cart.component';
 import { RegistrationComponent } from './views/registration/registration.component';
 import { CategoryComponent } from './views/category/category.component';
+import { ProductDetailComponent } from './views/product/product-detail/product-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'categories', component: CategoryComponent },
+  { path: 'product-detail/:id', component: ProductDetailComponent },
   { path: 'about', component: AboutComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'register', component: RegistrationComponent },

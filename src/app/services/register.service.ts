@@ -1,4 +1,4 @@
-import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserInterface } from '../model/user.interface';
 import { BASE_URL } from '../constants/api-constants';
@@ -11,8 +11,8 @@ export class RegisterService {
 
   register(userInfo: UserInterface) {
     const body: string = JSON.stringify(userInfo);
-    const header = { 'Content-Type': 'application/json' };
+    const headers = { 'Content-Type': 'application/json' };
 
-    return this.http.post(`${BASE_URL}users`, body, { headers: header });
+    return this.http.post(`${BASE_URL}clients`, body, { headers: headers });
   }
 }

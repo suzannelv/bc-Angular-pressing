@@ -2,11 +2,29 @@
   <app-load-spinner></app-load-spinner>
 </div>
 
-<div *ngIf="!isLoading">
-  <div *ngFor="let product of products">
-    <img [src]="product.imagePath" alt="产品图片" />
-    <h3>{{ product.name }}</h3>
-    <p>价格: {{ product.price }}</p>
-    <p>描述: {{ product.description }}</p>
+<div *ngIf="!isLoading" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+  <div *ngFor="let product of products; trackBy: trackByProductId">
+    <div class="col">
+      <div class="card shadow-sm">
+        <img
+          [src]="product.imagePath"
+          class="img-fluid itemImg"
+          [alt]="product.name"
+        />
+
+        <div class="card-body">
+          <h5>{{ product.name }}</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <span>{{ product.price | currency : "EUR" }} </span>
+            <a
+              [routerLink]="['/product-detail', product.id]"
+              class="text-body-secondary"
+            >
+              Voir détail
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

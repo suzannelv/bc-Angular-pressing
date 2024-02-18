@@ -90,22 +90,34 @@
         />
         <i class="fa-solid fa-location-dot"></i>
       </div>
+
       <div class="form-wrapper">
-        <input
-          type="text"
-          placeholder="Code postale"
+        <select
+          class="form-control"
+          name="city"
+          [(ngModel)]="selectedCity"
+          (change)="onCityChange(selectedCity)"
+          required
+        >
+          <option *ngFor="let city of uniqueCities" [ngValue]="city">
+            {{ city }}
+          </option>
+        </select>
+      </div>
+      <div class="form-wrapper">
+        <select
           class="form-control"
           name="zipCode"
-          ngModel
+          [(ngModel)]="selectedZipCode"
           required
-        />
-        <input
-          type="text"
-          placeholder="Ville"
-          class="form-control"
-          ngModel
-          required
-        />
+        >
+          <option
+            *ngFor="let zipCode of selectedCityZipCodes"
+            [ngValue]="zipCode['@id']"
+          >
+            {{ zipCode.zipCode }}
+          </option>
+        </select>
       </div>
       <button type="submit">Confirmer</button>
     </form>

@@ -1,9 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ProductService } from '../../services/product.service';
 import {
-  ProductInterface,
-  ProductResponse,
-} from '../../model/product.interface';
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import { ProductService } from '../../services/product.service';
+import { ProductInterface } from '../../model/product.interface';
 
 @Component({
   selector: 'app-product',
@@ -11,21 +14,22 @@ import {
   styleUrl: './product.component.css',
 })
 export class ProductComponent implements OnChanges {
-  @Input() categoryId?: number;
+  @Input() categoryId: number | undefined;
   products: ProductInterface[] = [];
   isLoading = true;
 
   constructor(private productService: ProductService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log('Current categoryId in child:', this.categoryId);
-    if (changes['categoryId'] && changes['categoryId'].currentValue) {
-      this.loadProductsByCategory(changes['categoryId'].currentValue);
+    const categoryIdChange = changes['categoryId'];
+    if (categoryIdChange && categoryIdChange.currentValue !== undefined) {
+      this.loadProductsByCategory(categoryIdChange.currentValue);
     }
+    console.log('categoryId dans product:', this.categoryId);
   }
 
-  loadProductsByCategory(categoryId: number): void {
-    this.isLoading = true; // Start loading when the category changes
+  loadProductsByCategory(categoryId: number | undefined): void {
+    this.isLoading = true;
     this.productService.getProductAll().subscribe({
       next: (products) => {
         if (products) {
@@ -39,6 +43,7 @@ export class ProductComponent implements OnChanges {
           this.products = [];
         }
         console.log('Filtered products:', this.products);
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading products:', error);
@@ -48,5 +53,9 @@ export class ProductComponent implements OnChanges {
         this.isLoading = false;
       },
     });
+  }
+
+  trackByProductId(index: number, product: ProductInterface): number {
+    return product.id; // 假设每个产品都有唯一的 ID
   }
 }
