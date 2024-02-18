@@ -22,19 +22,37 @@
         {{ product?.description }}
       </p>
 
-      <h4 class="fs-5">Services supplémentaire</h4>
-      <form>
-        <div *ngFor="let option of options" class="d-flex">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              [id]="option.name"
-            />
-            <label class="form-check-label" [for]="option.name">
-              {{ option.name }}
-            </label>
+      <form class="d-flex flex-wrap justify-content-between my-3">
+        <div class="service-group">
+          <h4 class="fs-5">Services supplémentaire</h4>
+          <div *ngFor="let option of options" class="d-flex">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                [id]="option.name"
+              />
+              <label class="form-check-label" [for]="option.name">
+                {{ option.name }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="material-group">
+          <h4 class="fs-5">Matière(s) du produit</h4>
+          <div *ngFor="let material of materials" class="d-flex">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                [id]="material.name"
+              />
+              <label class="form-check-label" [for]="material.name">
+                {{ material.name }}
+              </label>
+            </div>
           </div>
         </div>
       </form>

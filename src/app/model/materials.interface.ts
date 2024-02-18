@@ -1,4 +1,5 @@
 export interface MaterialsInterface {
+  id: number;
   name: string;
   coefficentPrice: number;
   productSelecteds?: any[];

@@ -10,7 +10,7 @@ import { MaterialResponse } from '../model/materials.interface';
 export class MaterialService {
   constructor(private http: HttpClient) {}
 
-  getMaterials(): Observable<MaterialResponse> {
+  getMaterialOptions(): Observable<MaterialResponse> {
     return this.http.get<MaterialResponse>(`${BASE_URL}materials`).pipe(
       catchError((error) => {
         console.error('An error occurred:', error);
