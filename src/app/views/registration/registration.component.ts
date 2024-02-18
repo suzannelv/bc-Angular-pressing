@@ -4,6 +4,7 @@ import { RegisterService } from '../../services/register.service';
 import { ZipCodeInterface } from '../../model/zipCode.interface';
 import { ZipCodeService } from '../../services/zip-code.service';
 import { zip } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -19,7 +20,8 @@ export class RegistrationComponent implements OnInit {
 
   constructor(
     private registerService: RegisterService,
-    private zipcodeService: ZipCodeService
+    private zipcodeService: ZipCodeService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +72,11 @@ export class RegistrationComponent implements OnInit {
     }
 
     this.registerService.register(dataToSubmit).subscribe({
-      next: (response) => console.log('Success:', response),
+      next: (response: any) => {
+        console.log('Success:', response);
+        const username = response.firstname;
+        this.router.navigate(['/welcome', username]);
+      },
       error: (error) => console.error('Registration error:', error),
     });
   }
