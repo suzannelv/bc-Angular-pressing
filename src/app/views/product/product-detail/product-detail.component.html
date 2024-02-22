@@ -3,26 +3,29 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a routerLink="/">Accueil</a></li>
       <li class="breadcrumb-item" aria-current="page">
-        {{ product?.name }}
+        {{ productSelected?.name }}
       </li>
     </ol>
   </nav>
 
   <div class="row mb-4 h-md-250 position-relative">
     <div class="col-lg-6">
-      <img [src]="product?.imagePath" alt="" class="img-fluid" />
+      <img [src]="productSelected?.imagePath" alt="" class="img-fluid" />
     </div>
     <div class="col-lg-6 p-4 d-flex flex-column position-static">
       <strong class="d-inline-block mb-2 text-primary-emphasis">{{
-        product?.category?.name
+        productSelected?.category?.name
       }}</strong>
-      <h3 class="mb-0">{{ product?.name }}</h3>
+      <h3 class="mb-0">{{ productSelected?.name }}</h3>
 
       <p class="card-text">
-        {{ product?.description }}
+        {{ productSelected?.description }}
       </p>
 
-      <form class="d-flex flex-wrap justify-content-between my-3">
+      <form
+        (ngSubmit)="onSubmit()"
+        class="d-flex flex-wrap justify-content-between my-3"
+      >
         <div class="service-group">
           <h4 class="fs-5">Services supplémentaire</h4>
           <div *ngFor="let option of options" class="d-flex">
@@ -30,8 +33,10 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                value=""
+                [value]="option.id"
                 [id]="option.name"
+                [(ngModel)]="selectedOptions[option.id]"
+                (ngModelChange)="handleOptionChange($event, option.id)"
               />
               <label class="form-check-label" [for]="option.name">
                 {{ option.name }}
@@ -40,19 +45,44 @@
           </div>
         </div>
         <div class="material-group">
-          <h4 class="fs-5">Matière(s) du produit</h4>
-          <div *ngFor="let material of materials" class="d-flex">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                [id]="material.name"
-              />
-              <label class="form-check-label" [for]="material.name">
-                {{ material.name }}
-              </label>
-            </div>
+          <h4 class="fs-5">Matière du produit</h4>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedMaterial"
+            (change)="onMaterialChange($event)"
+            name="materialSelect"
+          >
+            <option *ngFor="let material of materials" [value]="material.id">
+              {{ material.name }}
+            </option>
+          </select>
+        </div>
+        <div class="quantity-group my-3">
+          <h4 class="fs-5">Quantité</h4>
+          <div class="input-group">
+            <button
+              class="btn btn-style"
+              type="button"
+              (click)="decrementQuantity()"
+            >
+              -
+            </button>
+            <input
+              type="text"
+              class="form-control text-center"
+              [(ngModel)]="quantity"
+              name="quantity"
+            />
+            <button
+              class="btn btn-style"
+              type="button"
+              (click)="incrementQuantity()"
+            >
+              +
+            </button>
+            <button class="btn btn-style rounded-3 ms-5" type="submit">
+              Ajouter au panier
+            </button>
           </div>
         </div>
       </form>

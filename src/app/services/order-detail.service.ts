@@ -1,17 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BASE_URL } from '../constants/api-constants';
 import { Observable, catchError, throwError } from 'rxjs';
-import { MaterialResponse } from '../model/materials.interface';
+import {
+  OrderDetailInterface,
+  orderDetailResponse,
+} from '../model/orderDetail.interface';
+import { BASE_URL } from '../constants/api-constants';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MaterialService {
+export class OrderDetailService {
   constructor(private http: HttpClient) {}
 
-  getMaterialOptions(): Observable<MaterialResponse> {
-    return this.http.get<MaterialResponse>(`${BASE_URL}materials`).pipe(
+  getOrderDetails(): Observable<orderDetailResponse> {
+    return this.http.get<orderDetailResponse>(`${BASE_URL}order_details`).pipe(
       catchError((error) => {
         console.error('An error occurred:', error);
         return throwError(
