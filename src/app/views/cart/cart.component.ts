@@ -5,6 +5,7 @@ import { MaterialService } from '../../services/material.service';
 import { ServiceOptionsService } from '../../services/service-options.service';
 import { forkJoin, map } from 'rxjs';
 import { CartItemViewModel } from '../../model/CartItemViewModel.interface';
+import { calculateTotalPrice } from '../../utils/calculTotalPrice';
 
 @Component({
   selector: 'app-cart',
@@ -17,7 +18,10 @@ export class CartComponent implements OnInit {
 
   isDelivery: boolean = false;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private serviceOptionsService: ServiceOptionsService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();

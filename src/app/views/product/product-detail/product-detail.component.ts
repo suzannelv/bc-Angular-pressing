@@ -3,7 +3,10 @@ import { ProductInterface } from '../../../model/product.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { ServiceOptionsService } from '../../../services/service-options.service';
-import { ServiceOptionsInterface } from '../../../model/serviceOptions.interface';
+import {
+  OptionsResponse,
+  ServiceOptionsInterface,
+} from '../../../model/serviceOptions.interface';
 import { MaterialService } from '../../../services/material.service';
 import { MaterialsInterface } from '../../../model/materials.interface';
 import { ProductSelectedService } from '../../../services/product-selected.service';
@@ -25,6 +28,8 @@ export class ProductDetailComponent implements OnInit {
   selectedMaterial: string | undefined;
   quantity: number = 1;
   price: number = 0;
+  selectedMaterialCoeff: number = 1;
+  selectedServiceCoeff: number = 1;
 
   selectedOptions: { [key: string]: boolean } = {};
 
@@ -53,13 +58,15 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getOptions() {
-    this.optionsService.getServiceOptions().subscribe((res) => {
-      this.options = res['hydra:member'];
-      console.log(this.options);
-      this.options.forEach((option) => {
-        this.selectedOptions[option['@id']] = false;
+    this.optionsService
+      .getServiceOptions()
+      .subscribe((res: ServiceOptionsInterface[]) => {
+        this.options = res;
+        console.log('options :', this.options);
+        this.options?.forEach((option) => {
+          this.selectedOptions[option['@id']] = false;
+        });
       });
-    });
   }
 
   getMaterials() {
@@ -74,6 +81,14 @@ export class ProductDetailComponent implements OnInit {
   onMaterialChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedMaterial = selectElement.value;
+
+    // 找到选中材质的系数并更新 selectedMaterialCoeff
+    const selectedMaterialObj = this.materials?.find(
+      (material) => material['@id'] === this.selectedMaterial
+    );
+    if (selectedMaterialObj) {
+      this.selectedMaterialCoeff = selectedMaterialObj.coefficentPrice;
+    }
   }
 
   getProductSelected(productId: number) {
@@ -103,7 +118,9 @@ export class ProductDetailComponent implements OnInit {
       product: this.productSelected!['@id'],
       productName: this.productSelected!.name,
       material: this.selectedMaterial!,
+      materialCoefficent: this.selectedMaterialCoeff,
       serviceOptions: selectedServiceOptions,
+      // serviceCoefficent:
       quantity: this.quantity,
       price: this.productSelected!.price,
       imagePath: this.productSelected!.imagePath,

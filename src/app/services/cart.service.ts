@@ -3,7 +3,7 @@ import {
   CartProductSelectedInterface,
   CreateProductSelectedInterface,
 } from '../model/productSelected.interface';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const CART_STORAGE_KEY = 'cart';
 
@@ -58,7 +58,10 @@ export class CartService {
       return [];
     }
     console.log('Loaded cart items:', JSON.parse(cartLocalStorage));
-    return JSON.parse(cartLocalStorage) as CartProductSelectedInterface[];
+
+    const cart = JSON.parse(cartLocalStorage) as CartProductSelectedInterface[];
+    console.log('Loaded cart items from localStorage:', cart);
+    return cart;
   }
 
   getTotalQuantity(): number {

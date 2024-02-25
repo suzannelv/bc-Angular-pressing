@@ -10,11 +10,17 @@ export interface ProductSelectedInterface {
   quantity: number;
 }
 
+export interface ProductSelectedResponse {
+  'hydra:member': ProductSelectedInterface[];
+}
+
 export interface CreateProductSelectedInterface {
   product: string;
   productName: string;
   material: string;
+  materialCoefficent: number;
   serviceOptions: string[];
+  // serviceCoefficent: number;
   quantity: number;
   price: number;
   imagePath: string;
@@ -22,7 +28,3 @@ export interface CreateProductSelectedInterface {
 
 export interface CartProductSelectedInterface
   extends CreateProductSelectedInterface {}
-
-export interface ProductSelectedResponse {
-  'hydra:member': ProductSelectedInterface[];
-}
