@@ -1,4 +1,5 @@
 export interface ServiceOptionsInterface {
+  '@id': string;
   id: number;
   name: string;
   coefficentPrice: number;

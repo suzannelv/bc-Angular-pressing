@@ -1,0 +1,61 @@
+<form>
+  <div class="row mb-4">
+    <p class="fw-medium">Date de dépôt:</p>
+    <input type="date" class="form-control" />
+    <p class="fw-medium mt-4">Date de retrait</p>
+    <input type="date" class="form-control" />
+  </div>
+  <hr class="my-4" />
+
+  <div class="row mb-4">
+    <div class="col">
+      <div class="form-outline">
+        <label class="form-label" for="firtname">Prénom</label>
+        <input type="text" id="firtname" class="form-control" />
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-outline">
+        <label class="form-label" for="lastname">Nom</label>
+        <input type="text" id="lastname" class="form-control" />
+      </div>
+    </div>
+  </div>
+
+  <!-- adress input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="address">Adresse</label>
+    <input type="text" id="address" class="form-control" />
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-6">
+      <label class="form-label" for="zipCode">Code postal</label>
+      <input class="form-control" type="text" name="zipCode" id="zipCode" />
+    </div>
+    <div class="col-6">
+      <label class="form-label" for="city">Ville</label>
+      <input class="form-control" type="text" name="city" id="city" />
+    </div>
+  </div>
+
+  <!-- Email input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="email">Mail</label>
+    <input type="email" id="email" class="form-control" />
+  </div>
+
+  <!-- Number input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="phoneNumber">Tél</label>
+    <input type="number" id="phoneNumber" class="form-control" />
+  </div>
+
+  <!-- Message input -->
+  <div class="form-outline mb-4">
+    <label class="form-label" for="message">Message</label>
+    <textarea class="form-control" id="message" rows="4"></textarea>
+  </div>
+
+  <button type="button" class="btn mb-4">Confirmer</button>
+</form>

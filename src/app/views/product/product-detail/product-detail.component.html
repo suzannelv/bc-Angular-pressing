@@ -10,13 +10,20 @@
 
   <div class="row mb-4 h-md-250 position-relative">
     <div class="col-lg-6">
-      <img [src]="productSelected?.imagePath" alt="" class="img-fluid" />
+      <img
+        [src]="productSelected?.imagePath"
+        [alt]="productSelected?.name"
+        class="img-fluid"
+      />
     </div>
     <div class="col-lg-6 p-4 d-flex flex-column position-static">
       <strong class="d-inline-block mb-2 text-primary-emphasis">{{
         productSelected?.category?.name
       }}</strong>
-      <h3 class="mb-0">{{ productSelected?.name }}</h3>
+      <h3 class="mb-0">
+        {{ productSelected?.name }}
+        <span class="fs-6">{{ productSelected?.price }}€ / article </span>
+      </h3>
 
       <p class="card-text">
         {{ productSelected?.description }}
@@ -33,10 +40,11 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                [value]="option.id"
+                [value]="option['@id']"
                 [id]="option.name"
-                [(ngModel)]="selectedOptions[option.id]"
-                (ngModelChange)="handleOptionChange($event, option.id)"
+                [(ngModel)]="selectedOptions[option['@id']]"
+                (change)="handleOptionChange($event)"
+                [name]="option.name"
               />
               <label class="form-check-label" [for]="option.name">
                 {{ option.name }}
@@ -52,7 +60,10 @@
             (change)="onMaterialChange($event)"
             name="materialSelect"
           >
-            <option *ngFor="let material of materials" [value]="material.id">
+            <option
+              *ngFor="let material of materials"
+              [value]="material['@id']"
+            >
               {{ material.name }}
             </option>
           </select>

@@ -2,6 +2,7 @@ import { CategoryInterface } from './category.interface';
 import { ProductStatusInterface } from './productStatus.interface';
 
 export interface ProductInterface {
+  '@id': string;
   id: number;
   name: string;
   category: CategoryInterface;

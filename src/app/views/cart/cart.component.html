@@ -1,1 +1,153 @@
-<p>cart works!</p>
+<section class="h-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="row g-0" *ngIf="items; else emptyCart">
+              <!-- right:info about products -->
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-5"
+                  >
+                    <h1 class="fw-bold mb-0 text-black">Panier</h1>
+                    <h6 class="mb-0 text-muted">
+                      {{ totalQuantity }} articles
+                    </h6>
+                  </div>
+                  <hr class="my-4" />
+
+                  <div
+                    class="row mb-4 d-flex justify-content-between align-items-center"
+                    *ngFor="let item of items"
+                  >
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                      <img
+                        [src]="item.imagePath"
+                        class="img-fluid rounded-3"
+                        [alt]="item.productName"
+                      />
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                      <h6 class="text-black mb-0">{{ item.productName }}</h6>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                      <button class="btn btn-link px-2">
+                        <i class="fas fa-minus"></i>
+                      </button>
+
+                      <input
+                        id="form1"
+                        min="0"
+                        name="quantity"
+                        [value]="item.quantity"
+                        type="number"
+                        class="form-control form-control-sm"
+                      />
+
+                      <button class="btn btn-link px-2">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                      <h6 class="mb-0">{{ item.price }} €</h6>
+                    </div>
+                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                      <a href="#!" class="text-muted"
+                        ><i class="fas fa-times"></i
+                      ></a>
+                    </div>
+
+                    <!-- <div class="col-md-12">
+                      <p class="text-secondary">
+                        Service supplémentaires:{{
+                          item.serviceOptionsNames.join(", ")
+                        }}
+                      </p>
+                      <p>Matière : {{ item.materialName }}</p>
+                    </div> -->
+                  </div>
+
+                  <hr class="my-4" />
+                  <!-- part delivery or not/ and date choice -->
+                  <div class="row">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="collect"
+                        id="collect"
+                        (change)="handlePickupChoice()"
+                        [checked]="!isDelivery"
+                      />
+                      <label class="form-check-label" for="collect">
+                        Click & Collect
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="delivery"
+                        id="delivery"
+                        (change)="handleDeliveryChoice()"
+                        [checked]="isDelivery"
+                      />
+                      <label class="form-check-label" for="delivery">
+                        Livraison à domicile
+                      </label>
+                    </div>
+                  </div>
+                  <!-- choice 1 : click & collect -->
+                  <div class="row my-4" *ngIf="!isDelivery">
+                    <app-click-collect-form></app-click-collect-form>
+                  </div>
+
+                  <!-- choice 2 : delivery -->
+                  <div class="row my-4" *ngIf="isDelivery">
+                    <app-delivery-form></app-delivery-form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- left: payment -->
+              <div class="col-lg-4 bg-color">
+                <div class="p-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Paiement</h3>
+                  <hr class="my-4" />
+
+                  <div class="d-flex justify-content-between mb-4">
+                    <h5 class="text-uppercase">name</h5>
+                    <h5>Produit prix</h5>
+                  </div>
+
+                  <hr class="my-4" />
+
+                  <div class="d-flex justify-content-between mb-5">
+                    <h5 class="text-uppercase">Total price</h5>
+                    <h5>€ 137.00</h5>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-dark btn-block btn-lg"
+                    data-mdb-ripple-color="dark"
+                  >
+                    Confirmer
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Afficher ce message si le panier est vide -->
+
+            <ng-template #emptyCart>
+              <h2>Votre panier est vide</h2>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

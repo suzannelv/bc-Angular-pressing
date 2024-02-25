@@ -29,6 +29,8 @@ import { ProductComponent } from './views/product/product.component';
 import { LoadSpinnerComponent } from './components/load-spinner/load-spinner.component';
 import { ProductDetailComponent } from './views/product/product-detail/product-detail.component';
 import { WelcomeComponent } from './views/welcome/welcome.component';
+import { ClickCollectFormComponent } from './components/click-collect-form/click-collect-form.component';
+import { DeliveryFormComponent } from './components/delivery-form/delivery-form.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { WelcomeComponent } from './views/welcome/welcome.component';
     LoadSpinnerComponent,
     ProductDetailComponent,
     WelcomeComponent,
+    ClickCollectFormComponent,
+    DeliveryFormComponent,
   ],
   imports: [
     BrowserModule,

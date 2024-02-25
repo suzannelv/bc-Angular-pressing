@@ -7,6 +7,11 @@ import { ServiceOptionsInterface } from '../../../model/serviceOptions.interface
 import { MaterialService } from '../../../services/material.service';
 import { MaterialsInterface } from '../../../model/materials.interface';
 import { ProductSelectedService } from '../../../services/product-selected.service';
+import {
+  CreateProductSelectedInterface,
+  ProductSelectedInterface,
+} from '../../../model/productSelected.interface';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -17,16 +22,19 @@ export class ProductDetailComponent implements OnInit {
   productSelected: ProductInterface | undefined;
   options: ServiceOptionsInterface[] | undefined;
   materials: MaterialsInterface[] | undefined;
-  selectedMaterial: number | undefined;
+  selectedMaterial: string | undefined;
   quantity: number = 1;
-  selectedOptions: { [key: number]: boolean } = {};
+  price: number = 0;
+
+  selectedOptions: { [key: string]: boolean } = {};
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private optionsService: ServiceOptionsService,
     private materialService: MaterialService,
-    private productSelectedService: ProductSelectedService
+    private productSelectedService: ProductSelectedService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +57,7 @@ export class ProductDetailComponent implements OnInit {
       this.options = res['hydra:member'];
       console.log(this.options);
       this.options.forEach((option) => {
-        this.selectedOptions[option.id] = false;
+        this.selectedOptions[option['@id']] = false;
       });
     });
   }
@@ -58,14 +66,14 @@ export class ProductDetailComponent implements OnInit {
     this.materialService.getMaterialOptions().subscribe((res) => {
       this.materials = res['hydra:member'];
       if (this.materials && this.materials.length > 0) {
-        this.selectedMaterial = this.materials[0].id;
+        this.selectedMaterial = this.materials[0]['@id'];
       }
     });
   }
 
   onMaterialChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    this.selectedMaterial = Number(selectElement.value);
+    this.selectedMaterial = selectElement.value;
   }
 
   getProductSelected(productId: number) {
@@ -77,6 +85,7 @@ export class ProductDetailComponent implements OnInit {
       console.log(data);
     });
   }
+
   incrementQuantity() {
     this.quantity++;
   }
@@ -87,21 +96,28 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Selected options before filtering:', this.selectedOptions);
-    const selectedServiceOptions = Object.keys(this.selectedOptions)
-      .filter((key: any) => this.selectedOptions[key])
-      .map((id) => Number(id));
-    console.log(
-      'Adding to cart:',
-      this.productSelected,
-      this.quantity,
-      this.selectedMaterial,
-      selectedServiceOptions
+    const selectedServiceOptions = Object.keys(this.selectedOptions).filter(
+      (key: any) => this.selectedOptions[key]
     );
+    const productSelect: CreateProductSelectedInterface = {
+      product: this.productSelected!['@id'],
+      productName: this.productSelected!.name,
+      material: this.selectedMaterial!,
+      serviceOptions: selectedServiceOptions,
+      quantity: this.quantity,
+      price: this.productSelected!.price,
+      imagePath: this.productSelected!.imagePath,
+    };
+
+    console.log('Adding to cart:', productSelect);
+
+    this.cartService.addProduct(productSelect);
   }
 
-  handleOptionChange(isChecked: boolean, optionId: number): void {
-    this.selectedOptions[optionId] = isChecked;
-    console.log(`Option ${optionId} changed: ${isChecked}`);
+  handleOptionChange(e: Event): void {
+    const checkbox = e.target as HTMLInputElement;
+    const optionIri = checkbox.value;
+    this.selectedOptions[optionIri] = checkbox.checked;
+    console.log(`Option ${optionIri} changed: ${checkbox.checked}`);
   }
 }
