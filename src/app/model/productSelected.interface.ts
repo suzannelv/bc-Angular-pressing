@@ -20,7 +20,7 @@ export interface CreateProductSelectedInterface {
   material: string;
   materialCoefficent: number;
   serviceOptions: string[];
-  // serviceCoefficent: number;
+  serviceCoefficent: number[];
   quantity: number;
   price: number;
   imagePath: string;

@@ -72,4 +72,21 @@ export class CartService {
     });
     return totalQuantity;
   }
+
+  calculateTotalPrice(items: CartProductSelectedInterface[]): number {
+    let total = 0;
+    items.forEach((item) => {
+      const priceUni = item.price;
+      const quantity = item.quantity;
+      const optionCoeffTotal = item.serviceCoefficent.reduce(
+        (acc, curr) => acc + curr,
+        0
+      );
+      const materialCoeff = item.materialCoefficent;
+      total +=
+        (priceUni + priceUni * optionCoeffTotal + priceUni * materialCoeff) *
+        quantity;
+    });
+    return total;
+  }
 }

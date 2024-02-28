@@ -32,6 +32,7 @@ export class ProductDetailComponent implements OnInit {
   selectedServiceCoeff: number = 1;
 
   selectedOptions: { [key: string]: boolean } = {};
+  selectedServiceOptionsCoefficients: { [key: string]: number } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -110,17 +111,49 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
+  handleOptionChange(e: Event): void {
+    const checkbox = e.target as HTMLInputElement;
+    // const optionIri = checkbox.value;
+    // this.selectedOptions[optionIri] = checkbox.checked;
+    // 当选项被选中时，找到该选项的系数并存储
+
+    const optionId = checkbox.value;
+    this.selectedOptions[optionId] = checkbox.checked;
+    if (checkbox.checked) {
+      const option = this.options?.find((o) => o['@id'] === optionId);
+      if (option) {
+        this.selectedServiceOptionsCoefficients[optionId] =
+          option.coefficentPrice;
+      }
+    } else {
+      // 当选项被取消选中时，从存储中移除该选项的系数
+      delete this.selectedServiceOptionsCoefficients[optionId];
+    }
+
+    console.log(`Option ${optionId} changed: ${checkbox.checked}`);
+    console.log(
+      'Selected Service Options Coefficients:',
+      this.selectedServiceOptionsCoefficients
+    );
+    // console.log(`Option ${optionIri} changed: ${checkbox.checked}`);
+  }
+
   onSubmit() {
+    const serviceCoefficientsArray: number[] = Object.values(
+      this.selectedServiceOptionsCoefficients
+    );
+
     const selectedServiceOptions = Object.keys(this.selectedOptions).filter(
       (key: any) => this.selectedOptions[key]
     );
+
     const productSelect: CreateProductSelectedInterface = {
       product: this.productSelected!['@id'],
       productName: this.productSelected!.name,
       material: this.selectedMaterial!,
       materialCoefficent: this.selectedMaterialCoeff,
       serviceOptions: selectedServiceOptions,
-      // serviceCoefficent:
+      serviceCoefficent: serviceCoefficientsArray,
       quantity: this.quantity,
       price: this.productSelected!.price,
       imagePath: this.productSelected!.imagePath,
@@ -129,12 +162,5 @@ export class ProductDetailComponent implements OnInit {
     console.log('Adding to cart:', productSelect);
 
     this.cartService.addProduct(productSelect);
-  }
-
-  handleOptionChange(e: Event): void {
-    const checkbox = e.target as HTMLInputElement;
-    const optionIri = checkbox.value;
-    this.selectedOptions[optionIri] = checkbox.checked;
-    console.log(`Option ${optionIri} changed: ${checkbox.checked}`);
   }
 }

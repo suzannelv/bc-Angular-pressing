@@ -15,8 +15,8 @@ import { calculateTotalPrice } from '../../utils/calculTotalPrice';
 export class CartComponent implements OnInit {
   items: CartProductSelectedInterface[] = [];
   totalQuantity: number = 0;
-
   isDelivery: boolean = false;
+  totalPrice: number = 0;
 
   constructor(
     private cartService: CartService,
@@ -32,7 +32,12 @@ export class CartComponent implements OnInit {
   }
   getProducts() {
     this.items = this.cartService.getProducts();
-    console.log('items', this.items);
+    // console.log('items', this.items);
+    // // 打印每个商品的数量
+    // this.items.forEach((item, index) => {
+    //   console.log(`Item ${index} quantity:`, item.quantity);
+    // });
+    this.totalPrice = this.cartService.calculateTotalPrice(this.items);
   }
 
   handlePickupChoice() {
@@ -47,6 +52,27 @@ export class CartComponent implements OnInit {
     this.totalQuantity = this.cartService.getTotalQuantity();
   }
 
+  decrement(item: CartProductSelectedInterface) {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.updateCart();
+    }
+  }
+
+  increment(item: CartProductSelectedInterface) {
+    item.quantity++;
+  }
+
+  updateCart() {
+    this.updateTotalQuantity();
+    this.totalPrice = this.cartService.calculateTotalPrice(this.items);
+    this.cartService.getProducts();
+  }
+
+  // removeItem(item:CartProductSelectedInterface){
+  //   this.items = this.items.filter(item => item !== itemToRemove);
+  // this.updateCart();
+  // }
   // -----------------------------------------
 
   // items: CartItemViewModel[] = []; // 可能需要扩展以包含 materialName 和 serviceOptionsNames
