@@ -31,6 +31,7 @@ import { ProductDetailComponent } from './views/product/product-detail/product-d
 import { WelcomeComponent } from './views/welcome/welcome.component';
 import { ClickCollectFormComponent } from './components/click-collect-form/click-collect-form.component';
 import { DeliveryFormComponent } from './components/delivery-form/delivery-form.component';
+import { UserProfileComponent } from './views/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { DeliveryFormComponent } from './components/delivery-form/delivery-form.
     WelcomeComponent,
     ClickCollectFormComponent,
     DeliveryFormComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

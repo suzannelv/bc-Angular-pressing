@@ -1,0 +1,4 @@
+.btn[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+}

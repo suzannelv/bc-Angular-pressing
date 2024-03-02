@@ -1,7 +1,19 @@
-<form>
+<form #ccForm="ngForm" (ngSubmit)="onSubmit()">
   <h4>Choisissez votre date de dépot et de retrait</h4>
-  <p class="fw-medium">Date de dépôt:</p>
-  <input type="date" class="form-control" />
-  <p class="mt-4 fw-medium">Date de retrait</p>
-  <input type="date" class="form-control" />
+  <label class="fw-medium">Date de dépôt:</label>
+  <input
+    type="date"
+    class="form-control"
+    name="depositDate"
+    [(ngModel)]="formData.depositDate"
+  />
+  <label class="mt-4 fw-medium">Date de retrait</label>
+  <input
+    type="date"
+    class="form-control"
+    name="retrieveDate"
+    [(ngModel)]="formData.retrieveDate"
+  />
+
+  <button type="submit" class="btn my-4">Confirmer</button>
 </form>

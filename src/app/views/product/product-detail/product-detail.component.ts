@@ -28,7 +28,7 @@ export class ProductDetailComponent implements OnInit {
   selectedMaterial: string | undefined;
   quantity: number = 1;
   price: number = 0;
-  selectedMaterialCoeff: number = 1;
+  selectedMaterialCoeff: number = 0;
   selectedServiceCoeff: number = 1;
 
   selectedOptions: { [key: string]: boolean } = {};
@@ -89,6 +89,7 @@ export class ProductDetailComponent implements OnInit {
     );
     if (selectedMaterialObj) {
       this.selectedMaterialCoeff = selectedMaterialObj.coefficentPrice;
+      console.log('材料系数：', this.selectedMaterialCoeff);
     }
   }
 
@@ -131,22 +132,30 @@ export class ProductDetailComponent implements OnInit {
     }
 
     console.log(`Option ${optionId} changed: ${checkbox.checked}`);
-    console.log(
-      'Selected Service Options Coefficients:',
-      this.selectedServiceOptionsCoefficients
-    );
+    console.log('服务选项系数:', this.selectedServiceOptionsCoefficients);
   }
 
   // calcul the total price of one item
   calculateItemTotalPrice(): number {
+    console.log(`计算前单品价格:`, {
+      productName: this.productSelected?.name,
+      basePrice: this.productSelected?.price,
+      quantity: this.quantity,
+      serviceCoefficients: this.selectedServiceOptionsCoefficients,
+      materialCoefficient: this.selectedMaterialCoeff,
+    });
+
     const basePrice = this.productSelected?.price || 0;
     const servicePriceIncrease = Object.values(
       this.selectedServiceOptionsCoefficients
     ).reduce((acc, coeff) => acc + coeff, 0);
+
     const materialPriceIncrease = this.selectedMaterialCoeff;
+    console.log('matière coeff:', materialPriceIncrease);
     const totalPrice =
       basePrice * (1 + servicePriceIncrease + materialPriceIncrease);
-    return totalPrice * this.quantity;
+    console.log('总价:', totalPrice);
+    return parseFloat((totalPrice * this.quantity).toFixed(2));
   }
 
   onSubmit() {
@@ -178,7 +187,12 @@ export class ProductDetailComponent implements OnInit {
       imagePath: this.productSelected!.imagePath,
     };
 
-    console.log('Adding to cart:', productSelect);
+    console.log(
+      'Adding to cart:',
+      productSelect,
+      '单个产品总价:',
+      productSelect.price
+    );
 
     this.cartService.addProduct(productSelect);
   }

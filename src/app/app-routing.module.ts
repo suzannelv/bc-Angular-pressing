@@ -9,6 +9,7 @@ import { RegistrationComponent } from './views/registration/registration.compone
 import { CategoryComponent } from './views/category/category.component';
 import { ProductDetailComponent } from './views/product/product-detail/product-detail.component';
 import { WelcomeComponent } from './views/welcome/welcome.component';
+import { UserProfileComponent } from './views/user-profile/user-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'auth', component: AuthComponent },
   { path: 'register', component: RegistrationComponent },
   { path: 'welcome/:username', component: WelcomeComponent },
+  { path: 'profile', component: UserProfileComponent },
   { path: 'cart', component: CartComponent },
   { path: '**', component: NotFoundComponent },
 ];

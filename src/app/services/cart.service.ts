@@ -36,6 +36,7 @@ export class CartService {
   // }
 
   addProduct(product: CreateProductSelectedInterface): void {
+    console.log('加入购物车时产品价格:', product.price);
     let currentCart = this.getProducts(); // 获取当前购物车的内容
 
     const index = currentCart.findIndex((p) => p.uniqueId === product.uniqueId);
@@ -84,8 +85,12 @@ export class CartService {
   calculateTotalPrice(items: CartProductSelectedInterface[]): number {
     let total = 0;
     items.forEach((item) => {
-      total += item.price * item.quantity;
+      console.log(
+        `服务中价格: ${item.productName}, Quantity: ${item.quantity}, Price: ${item.price}`
+      );
+      total += item.price;
     });
+    console.log('Calculated cart total:', total);
     return parseFloat(total.toFixed(2));
   }
 }
