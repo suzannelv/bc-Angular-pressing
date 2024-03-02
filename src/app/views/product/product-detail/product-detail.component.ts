@@ -138,7 +138,26 @@ export class ProductDetailComponent implements OnInit {
     // console.log(`Option ${optionIri} changed: ${checkbox.checked}`);
   }
 
+  // calcul the total price of one item
+  calculateItemTotalPrice(): number {
+    const basePrice = this.productSelected?.price || 0;
+    const servicePriceIncrease = Object.values(
+      this.selectedServiceOptionsCoefficients
+    ).reduce((acc, coeff) => acc + coeff, 0);
+    const materialPriceIncrease = this.selectedMaterialCoeff;
+    const totalPrice =
+      basePrice * (1 + servicePriceIncrease + materialPriceIncrease);
+    return totalPrice * this.quantity;
+  }
+
   onSubmit() {
+    // 为商品/选项/材料组合生成一个唯一标识符
+    const uniqueId = `${this.productSelected!['@id']}-${Object.keys(
+      this.selectedOptions
+    )
+      .filter((key) => this.selectedOptions[key])
+      .join('-')}-${this.selectedMaterial}`;
+
     const serviceCoefficientsArray: number[] = Object.values(
       this.selectedServiceOptionsCoefficients
     );
@@ -148,6 +167,7 @@ export class ProductDetailComponent implements OnInit {
     );
 
     const productSelect: CreateProductSelectedInterface = {
+      uniqueId,
       product: this.productSelected!['@id'],
       productName: this.productSelected!.name,
       material: this.selectedMaterial!,
@@ -155,7 +175,7 @@ export class ProductDetailComponent implements OnInit {
       serviceOptions: selectedServiceOptions,
       serviceCoefficent: serviceCoefficientsArray,
       quantity: this.quantity,
-      price: this.productSelected!.price,
+      price: this.calculateItemTotalPrice(),
       imagePath: this.productSelected!.imagePath,
     };
 

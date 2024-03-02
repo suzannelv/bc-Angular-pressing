@@ -15,6 +15,7 @@ export interface ProductSelectedResponse {
 }
 
 export interface CreateProductSelectedInterface {
+  uniqueId: string;
   product: string;
   productName: string;
   material: string;

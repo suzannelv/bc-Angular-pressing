@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body p-0">
-            <div class="row g-0" *ngIf="items; else emptyCart">
+            <div class="row g-0" *ngIf="items.length > 0; else emptyCart">
               <!-- right:info about products -->
               <div class="col-lg-8">
                 <div class="p-5">
@@ -40,16 +40,13 @@
                         <i class="fas fa-minus"></i>
                       </button>
 
-                      <!-- <input
+                      <input
                         min="0"
                         name="quantity"
                         [value]="item.quantity"
                         type="number"
                         class="form-control form-control-sm"
-                      /> -->
-                      <p class="form-control form-control-sm">
-                        {{ item.quantity }}
-                      </p>
+                      />
 
                       <button
                         class="btn btn-link px-2"
@@ -61,15 +58,17 @@
                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                       <h6 class="mb-0">{{ item.price }} €</h6>
                     </div>
+
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <a href="#!" class="text-muted"
-                        ><i class="fas fa-times"></i
-                      ></a>
+                      <span class="" (click)="removeItem(item.uniqueId)">
+                        <i class="fas fa-times"></i>
+                      </span>
                     </div>
                   </div>
 
                   <hr class="my-4" />
-                  <!-- part delivery or not/ and date choice -->
+
+                  <!-- Partie pour les choix de date de dépôt ou livraison -->
                   <div class="row">
                     <div class="form-check">
                       <input

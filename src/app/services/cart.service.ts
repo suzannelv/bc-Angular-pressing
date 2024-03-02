@@ -38,7 +38,7 @@ export class CartService {
   addProduct(product: CreateProductSelectedInterface): void {
     let currentCart = this.getProducts(); // 获取当前购物车的内容
 
-    const index = currentCart.findIndex((p) => p.product === product.product);
+    const index = currentCart.findIndex((p) => p.uniqueId === product.uniqueId);
 
     if (index !== -1) {
       currentCart[index].quantity += product.quantity;
@@ -64,6 +64,14 @@ export class CartService {
     return cart;
   }
 
+  removeProduct(uniqueId: string) {
+    let currentCart = this.getProducts();
+    const newCart = currentCart.filter((item) => item.uniqueId !== uniqueId);
+
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+    this.cart.next(newCart);
+  }
+
   getTotalQuantity(): number {
     let totalQuantity = 0;
     const currentCart = this.getProducts();
@@ -76,17 +84,9 @@ export class CartService {
   calculateTotalPrice(items: CartProductSelectedInterface[]): number {
     let total = 0;
     items.forEach((item) => {
-      const priceUni = item.price;
-      const quantity = item.quantity;
-      const optionCoeffTotal = item.serviceCoefficent.reduce(
-        (acc, curr) => acc + curr,
-        0
-      );
-      const materialCoeff = item.materialCoefficent;
-      total +=
-        (priceUni + priceUni * optionCoeffTotal + priceUni * materialCoeff) *
-        quantity;
+      total += item.price * item.quantity;
     });
-    return total;
+
+    return parseFloat(total.toFixed(2));
   }
 }

@@ -18,18 +18,30 @@ export class CartComponent implements OnInit {
   isDelivery: boolean = false;
   totalPrice: number = 0;
 
-  constructor(
-    private cartService: CartService,
-    private serviceOptionsService: ServiceOptionsService
-  ) {}
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.getProducts();
-    this.updateTotalQuantity();
-    this.cartService.cart$.subscribe((q) => {
-      this.updateTotalQuantity();
+    // this.getProducts();
+    // this.updateTotalQuantity();
+    // this.cartService.cart$.subscribe((q) => {
+    //   this.updateTotalQuantity();
+    // });
+    this.cartService.cart$.subscribe((newCart) => {
+      console.log('购物车已更新', newCart);
+      this.items = newCart;
+      this.totalPrice = this.cartService.calculateTotalPrice(newCart);
+      this.totalQuantity = this.cartService.getTotalQuantity();
     });
+    // 初始加载购物车
+    this.loadInitialCart();
   }
+
+  loadInitialCart() {
+    this.items = this.cartService.getProducts();
+    this.totalPrice = this.cartService.calculateTotalPrice(this.items);
+    this.totalQuantity = this.cartService.getTotalQuantity();
+  }
+
   getProducts() {
     this.items = this.cartService.getProducts();
     // console.log('items', this.items);
@@ -69,56 +81,8 @@ export class CartComponent implements OnInit {
     this.cartService.getProducts();
   }
 
-  // removeItem(item:CartProductSelectedInterface){
-  //   this.items = this.items.filter(item => item !== itemToRemove);
-  // this.updateCart();
-  // }
-  // -----------------------------------------
-
-  // items: CartItemViewModel[] = []; // 可能需要扩展以包含 materialName 和 serviceOptionsNames
-
-  // constructor(
-  //   private cartService: CartService,
-  //   private materialService: MaterialService,
-  //   private serviceOptionsService: ServiceOptionsService
-  // ) {}
-
-  // ngOnInit(): void {
-  //   this.getProducts();
-  // }
-
-  // getProducts() {
-  //   forkJoin({
-  //     cartItems: this.cartService.cart$,
-  //     materials: this.materialService.getMaterialOptions(),
-  //     serviceOptions: this.serviceOptionsService.getServiceOptions(),
-  //   })
-  //     .pipe(
-  //       map(({ cartItems, materials, serviceOptions }) => {
-  //         return cartItems.map((item) => {
-  //           // 找到每个项目的材料和服务选项的名称
-  //           const materialName =
-  //             materials['hydra:member'].find(
-  //               (material) => material['@id'] === item.material
-  //             )?.name || 'Matière inconnue';
-  //           const serviceOptionsNames = item.serviceOptions
-  //             .map(
-  //               (soUri) =>
-  //                 serviceOptions['hydra:member'].find(
-  //                   (option) => option['@id'] === soUri
-  //                 )?.name
-  //             )
-  //             .filter((name) => !!name) as string[]; // 过滤掉未找到的项
-
-  //           console.log('Mapped item with details:', item);
-  //           return { ...item, materialName, serviceOptionsNames };
-  //         });
-  //       })
-  //     )
-  //     .subscribe((itemsWithDetails) => {
-  //       console.log('Items with details:', itemsWithDetails);
-  //       this.items = itemsWithDetails;
-  //       console.log('items with details', this.items);
-  //     });
-  // }
+  removeItem(uniqueId: string) {
+    this.cartService.removeProduct(uniqueId);
+    this.getProducts();
+  }
 }
