@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { CartProductSelectedInterface } from '../../model/productSelected.interface';
-import { MaterialService } from '../../services/material.service';
-import { ServiceOptionsService } from '../../services/service-options.service';
-import { forkJoin, map } from 'rxjs';
-import { CartItemViewModel } from '../../model/CartItemViewModel.interface';
-import { calculateTotalPrice } from '../../utils/calculTotalPrice';
+import { PaymentService } from '../../services/payment.service';
+import { PaymentInterface } from '../../model/payment.interface';
 
 @Component({
   selector: 'app-cart',
@@ -17,15 +14,14 @@ export class CartComponent implements OnInit {
   totalQuantity: number = 0;
   isDelivery: boolean = false;
   totalPrice: number = 0;
+  paymentsOptions: PaymentInterface[] = [];
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private paymentService: PaymentService
+  ) {}
 
   ngOnInit(): void {
-    // this.getProducts();
-    // this.updateTotalQuantity();
-    // this.cartService.cart$.subscribe((q) => {
-    //   this.updateTotalQuantity();
-    // });
     this.cartService.cart$.subscribe((newCart) => {
       console.log('购物车已更新', newCart);
       this.items = newCart;
@@ -34,6 +30,7 @@ export class CartComponent implements OnInit {
     });
     // 初始加载购物车
     this.loadInitialCart();
+    this.getPayments();
   }
 
   loadInitialCart() {
@@ -44,12 +41,13 @@ export class CartComponent implements OnInit {
 
   getProducts() {
     this.items = this.cartService.getProducts();
-    // console.log('items', this.items);
-    // // 打印每个商品的数量
-    // this.items.forEach((item, index) => {
-    //   console.log(`Item ${index} quantity:`, item.quantity);
-    // });
     this.totalPrice = this.cartService.calculateTotalPrice(this.items);
+  }
+  getPayments() {
+    this.paymentService.getPaymentMethods().subscribe((res) => {
+      this.paymentsOptions = res['hydra:member'];
+      console.log(this.paymentsOptions);
+    });
   }
 
   handlePickupChoice() {

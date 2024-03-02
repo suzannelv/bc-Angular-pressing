@@ -135,7 +135,6 @@ export class ProductDetailComponent implements OnInit {
       'Selected Service Options Coefficients:',
       this.selectedServiceOptionsCoefficients
     );
-    // console.log(`Option ${optionIri} changed: ${checkbox.checked}`);
   }
 
   // calcul the total price of one item

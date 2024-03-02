@@ -98,13 +98,15 @@
                     </div>
                   </div>
                   <!-- choice 1 : click & collect -->
-                  <div class="row my-4" *ngIf="!isDelivery">
-                    <app-click-collect-form></app-click-collect-form>
+                  <div class="row my-4">
+                    <app-click-collect-form
+                      *ngIf="!isDelivery"
+                    ></app-click-collect-form>
                   </div>
 
                   <!-- choice 2 : delivery -->
-                  <div class="row my-4" *ngIf="isDelivery">
-                    <app-delivery-form></app-delivery-form>
+                  <div class="row my-4">
+                    <app-delivery-form *ngIf="isDelivery"></app-delivery-form>
                   </div>
                 </div>
               </div>
@@ -118,52 +120,28 @@
 
                   <hr class="my-4" />
 
-                  <div class="d-flex justify-content-between mb-4">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="paypal"
-                      id="paypal"
-                    />
-                    <label class="text-uppercase" for="paypal">PayPal</label>
-                    <i class="fa-brands fa-cc-paypal fs-5"></i>
-                  </div>
-                  <div class="d-flex justify-content-between mb-4">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="visa"
-                      id="visa"
-                    />
-                    <label class="text-uppercase" for="visa">Visa</label>
-                    <i class="fa-brands fa-cc-visa fs-5"></i>
-                  </div>
-
-                  <div class="d-flex justify-content-between mb-4">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="mastercard"
-                      id="mastercard"
-                    />
-                    <label class="text-uppercase" for="mastercard"
-                      >MasterCard</label
+                  <!-- Moyens de paiement -->
+                  <div *ngIf="paymentsOptions.length > 0">
+                    <div
+                      class="payment-options"
+                      *ngFor="let option of paymentsOptions"
                     >
-                    <i class="fa-brands fa-cc-mastercard fs-5"></i>
-                  </div>
+                      <div class="d-flex justify-content-between mb-4">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [name]="option.method"
+                          [id]="option.method"
+                        />
+                        <label
+                          class="text-uppercase col-7"
+                          [for]="option.method"
+                          >{{ option.method }}</label
+                        >
 
-                  <div class="d-flex justify-content-between mb-4">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="payInStore"
-                      id="payInStore"
-                    />
-                    <label class="text-uppercase" for="payInStore"
-                      >Paiement <br />
-                      en boutique</label
-                    >
-                    <i class="fa-solid fa-cash-register fs-5"></i>
+                        <i [class]="option.icon"></i>
+                      </div>
+                    </div>
                   </div>
 
                   <hr class="my-4" />
@@ -177,7 +155,7 @@
                     type="button"
                     class="btn btn-secondary btn-block btn-lg"
                   >
-                    Valider
+                    Passer la commande
                   </button>
                   <hr class="my-4" />
                   <div>

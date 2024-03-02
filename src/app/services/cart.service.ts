@@ -86,7 +86,6 @@ export class CartService {
     items.forEach((item) => {
       total += item.price * item.quantity;
     });
-
     return parseFloat(total.toFixed(2));
   }
 }
