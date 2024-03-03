@@ -130,8 +130,10 @@
                         <input
                           class="form-check-input"
                           type="radio"
-                          [name]="option.method"
+                          name="paymentMethod"
+                          [value]="option['@id']"
                           [id]="option.method"
+                          (change)="onPaymentMethodChange($event)"
                         />
                         <label
                           class="text-uppercase col-7"

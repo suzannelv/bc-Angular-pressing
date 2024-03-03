@@ -22,6 +22,7 @@ export class CartComponent implements OnInit {
   isDelivery: boolean = false;
   totalPrice: number = 0;
   paymentsOptions: PaymentInterface[] = [];
+  selectedPaymentMethod: string = '';
 
   constructor(
     private cartService: CartService,
@@ -91,17 +92,23 @@ export class CartComponent implements OnInit {
     this.getProducts();
   }
 
+  // traiter le choix de paiement
+  onPaymentMethodChange(event: any) {
+    const selectdEl = event.target as HTMLInputElement;
+    this.selectedPaymentMethod = selectdEl.value;
+  }
+
   submitForms() {
-    let formData;
-    if (this.isDelivery) {
-      formData = this.deliveryFormComponent?.submitForm();
+    let clickCollectFormData;
+    let deliveryFormData;
+
+    if (!this.isDelivery) {
+      clickCollectFormData = this.clickCollectFormComponent?.submitForm();
     } else {
-      formData = this.clickCollectFormComponent?.submitForm();
+      deliveryFormData = this.deliveryFormComponent?.submitForm();
     }
-    if (formData) {
-      console.log('子表单数据：', formData);
-    } else {
-      console.log('表单验证失败，没有数据返回。');
-    }
+    console.log('Click & Collect Form Data:', clickCollectFormData);
+    console.log('Delivery Form Data:', deliveryFormData);
+    console.log('Selected Payment Method:', this.selectedPaymentMethod);
   }
 }
