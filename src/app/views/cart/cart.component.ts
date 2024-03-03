@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { CartProductSelectedInterface } from '../../model/productSelected.interface';
 import { PaymentService } from '../../services/payment.service';
 import { PaymentInterface } from '../../model/payment.interface';
+import { ClickCollectFormComponent } from '../../components/click-collect-form/click-collect-form.component';
+import { DeliveryFormComponent } from '../../components/delivery-form/delivery-form.component';
 
 @Component({
   selector: 'app-cart',
@@ -10,6 +12,11 @@ import { PaymentInterface } from '../../model/payment.interface';
   styleUrl: './cart.component.css',
 })
 export class CartComponent implements OnInit {
+  @ViewChild(ClickCollectFormComponent)
+  clickCollectFormComponent?: ClickCollectFormComponent;
+  @ViewChild(DeliveryFormComponent)
+  deliveryFormComponent?: DeliveryFormComponent;
+
   items: CartProductSelectedInterface[] = [];
   totalQuantity: number = 0;
   isDelivery: boolean = false;
@@ -82,5 +89,19 @@ export class CartComponent implements OnInit {
   removeItem(uniqueId: string) {
     this.cartService.removeProduct(uniqueId);
     this.getProducts();
+  }
+
+  submitForms() {
+    let formData;
+    if (this.isDelivery) {
+      formData = this.deliveryFormComponent?.submitForm();
+    } else {
+      formData = this.clickCollectFormComponent?.submitForm();
+    }
+    if (formData) {
+      console.log('子表单数据：', formData);
+    } else {
+      console.log('表单验证失败，没有数据返回。');
+    }
   }
 }

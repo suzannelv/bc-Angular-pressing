@@ -1,61 +1,230 @@
-<form>
+<form #deliveryForm="ngForm">
   <div class="row mb-4">
-    <p class="fw-medium">Date de dépôt:</p>
-    <input type="date" class="form-control" />
-    <p class="fw-medium mt-4">Date de retrait</p>
-    <input type="date" class="form-control" />
+    <label for="depositDate" class="fw-medium">Date de dépôt:</label>
+    <input
+      type="date"
+      id="depositDate"
+      name="depositDate"
+      class="form-control"
+      [(ngModel)]="deliveryInfo.depositDate"
+      #depositRef="ngModel"
+      required
+    />
+    <p
+      class="text-danger"
+      *ngIf="
+        depositRef.invalid &&
+        (depositRef.dirty || depositRef.touched || deliveryForm.submitted)
+      "
+    >
+      Il faut choisir une date de dépôt
+    </p>
+    <label for="retrieveDate" class="fw-medium mt-4">Date de livraison</label>
+    <input
+      type="date"
+      id="retrieveDate"
+      name="retrieveDate"
+      class="form-control"
+      [(ngModel)]="deliveryInfo.retrieveDate"
+      #retrieveRef="ngModel"
+      required
+    />
+    <p
+      class="text-danger"
+      *ngIf="
+        retrieveRef.invalid &&
+        (depositRef.dirty || depositRef.touched || deliveryForm.submitted)
+      "
+    >
+      Il faut choisir une date de retrait
+    </p>
+    <p class="text-danger" *ngIf="!isDeliveryDateValid()">
+      Le moment de récupération ne peut pas être antérieur au moment de dépôt.
+    </p>
   </div>
   <hr class="my-4" />
 
   <div class="row mb-4">
     <div class="col">
       <div class="form-outline">
-        <label class="form-label" for="firtname">Prénom</label>
-        <input type="text" id="firtname" class="form-control" />
+        <label class="form-label" for="firstname">Prénom</label>
+        <input
+          type="text"
+          id="firstname"
+          name="firstname"
+          class="form-control"
+          [(ngModel)]="clientInfo.firstname"
+          #firstnameRef="ngModel"
+          required
+        />
+        <p
+          class="text-danger"
+          *ngIf="
+            firstnameRef.invalid &&
+            (firstnameRef.dirty ||
+              firstnameRef.touched ||
+              deliveryForm.submitted)
+          "
+        >
+          Il faut remplir votre nom
+        </p>
       </div>
     </div>
     <div class="col">
       <div class="form-outline">
         <label class="form-label" for="lastname">Nom</label>
-        <input type="text" id="lastname" class="form-control" />
+        <input
+          type="text"
+          id="lastname"
+          name="lastname"
+          class="form-control"
+          [(ngModel)]="clientInfo.lastname"
+          #lastnameRef="ngModel"
+          required
+        />
+        <p
+          class="text-danger"
+          *ngIf="
+            lastnameRef.invalid &&
+            (lastnameRef.dirty || lastnameRef.touched || deliveryForm.submitted)
+          "
+        >
+          Il faut remplir votre prénom
+        </p>
       </div>
     </div>
   </div>
 
   <!-- adress input -->
   <div class="form-outline mb-4">
-    <label class="form-label" for="address">Adresse</label>
-    <input type="text" id="address" class="form-control" />
+    <label class="form-label" for="adress">Adresse</label>
+    <input
+      type="text"
+      id="adress"
+      class="form-control"
+      name="adress"
+      [(ngModel)]="clientInfo.adress"
+      #adsRef="ngModel"
+      required
+    />
+    <p
+      class="text-danger"
+      *ngIf="
+        adsRef.invalid &&
+        (adsRef.dirty || adsRef.touched || deliveryForm.submitted)
+      "
+    >
+      Il faut remplir votre Adresse
+    </p>
   </div>
 
   <div class="row mb-4">
     <div class="col-6">
       <label class="form-label" for="zipCode">Code postal</label>
-      <input class="form-control" type="text" name="zipCode" id="zipCode" />
+      <input
+        class="form-control"
+        type="text"
+        name="zipCode"
+        id="zipCode"
+        [(ngModel)]="clientInfo.zipCode.zipCode"
+        #zipcodeRef="ngModel"
+        required
+      />
+      <p
+        class="text-danger"
+        *ngIf="
+          zipcodeRef.invalid &&
+          (zipcodeRef.dirty || zipcodeRef.touched || deliveryForm.submitted)
+        "
+      >
+        Il faut remplir code postale
+      </p>
     </div>
     <div class="col-6">
       <label class="form-label" for="city">Ville</label>
-      <input class="form-control" type="text" name="city" id="city" />
+      <input
+        class="form-control"
+        type="text"
+        name="city"
+        id="city"
+        [(ngModel)]="clientInfo.zipCode.city"
+        #cityRef="ngModel"
+        required
+      />
+      <p
+        class="text-danger"
+        *ngIf="
+          cityRef.invalid &&
+          (cityRef.dirty || cityRef.touched || deliveryForm.submitted)
+        "
+      >
+        Il faut remplir la ville
+      </p>
     </div>
   </div>
 
   <!-- Email input -->
   <div class="form-outline mb-4">
     <label class="form-label" for="email">Mail</label>
-    <input type="email" id="email" class="form-control" />
+    <input
+      type="email"
+      id="email"
+      class="form-control"
+      name="email"
+      [(ngModel)]="clientInfo.email"
+      #mailRef="ngModel"
+      required
+    />
+    <p
+      class="text-danger"
+      *ngIf="
+        mailRef.invalid &&
+        (mailRef.dirty || mailRef.touched || deliveryForm.submitted)
+      "
+    >
+      Il faut remplir votre email
+    </p>
   </div>
 
   <!-- Number input -->
   <div class="form-outline mb-4">
     <label class="form-label" for="phoneNumber">Tél</label>
-    <input type="number" id="phoneNumber" class="form-control" />
+    <input
+      type="number"
+      id="phoneNumber"
+      class="form-control"
+      name="phoneNumber"
+      [(ngModel)]="clientInfo.phoneNumber"
+      #telRef="ngModel"
+      required
+    />
+    <p
+      class="text-danger"
+      *ngIf="
+        telRef.invalid &&
+        (telRef.dirty || telRef.touched || deliveryForm.submitted)
+      "
+    >
+      Il faut remplir votre numéro de téléphone
+    </p>
   </div>
 
   <!-- Message input -->
   <div class="form-outline mb-4">
-    <label class="form-label" for="message">Message</label>
-    <textarea class="form-control" id="message" rows="4"></textarea>
+    <label class="form-label" for="comment">Message</label>
+    <textarea
+      class="form-control"
+      id="comment"
+      rows="4"
+      name="comment"
+    ></textarea>
   </div>
 
-  <button type="button" class="btn mb-4">Confirmer</button>
+  <!-- <button
+    type="submit"
+    class="btn mb-4"
+    [disabled]="!deliveryForm.form.valid || !isDeliveryDateValid()"
+  >
+    Confirmer
+  </button> -->
 </form>

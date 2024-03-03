@@ -1,6 +1,8 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { FormDataService } from '../../services/form-data.service';
 import { AuthService } from '../../services/auth.service';
+import { isDateAfter } from '../../utils/isDateAfter';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-click-collect-form',
@@ -8,22 +10,32 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './click-collect-form.component.css',
 })
 export class ClickCollectFormComponent implements OnInit {
+  @ViewChild('ccForm') myForm!: NgForm;
+
   formData = {
     depositDate: '',
     retrieveDate: '',
   };
-  constructor(
-    private formDataService: FormDataService,
-    private authService: AuthService
-  ) {}
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
     }
   }
 
-  onSubmit() {
-    this.formDataService.updateFormData(this.formData);
-    console.log(this.formData);
+  isRetrieveDateValid(): boolean {
+    if (this.formData.depositDate && this.formData.retrieveDate) {
+      return isDateAfter(this.formData.depositDate, this.formData.retrieveDate);
+    }
+    return true;
+  }
+
+  submitForm() {
+    if (this.myForm?.valid && this.isRetrieveDateValid()) {
+      return this.formData;
+    } else {
+      return null;
+    }
   }
 }

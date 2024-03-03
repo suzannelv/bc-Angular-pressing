@@ -1,4 +1,4 @@
-<form #ccForm="ngForm" (ngSubmit)="onSubmit()">
+<form #ccForm="ngForm">
   <h4>Choisissez votre date de dépot et de retrait</h4>
   <label class="fw-medium">Date de dépôt:</label>
   <input
@@ -6,14 +6,51 @@
     class="form-control"
     name="depositDate"
     [(ngModel)]="formData.depositDate"
+    #depositRef="ngModel"
+    required
   />
+  <p
+    class="text-danger"
+    *ngIf="
+      depositRef.invalid &&
+      (depositRef.dirty || depositRef.touched || ccForm.submitted)
+    "
+  >
+    Il faut choisir une date de retrait
+  </p>
   <label class="mt-4 fw-medium">Date de retrait</label>
   <input
     type="date"
     class="form-control"
     name="retrieveDate"
     [(ngModel)]="formData.retrieveDate"
+    #retrieveRef="ngModel"
+    required
   />
+  <p
+    class="text-danger"
+    *ngIf="
+      retrieveRef.invalid &&
+      (retrieveRef.dirty || retrieveRef.touched || ccForm.submitted)
+    "
+  >
+    Il faut choisir une date de retrait
+  </p>
+  <p
+    class="text-danger"
+    *ngIf="
+      !isRetrieveDateValid() &&
+      (ccForm.submitted || retrieveRef.dirty || retrieveRef.touched)
+    "
+  >
+    Le moment de récupération ne peut pas être antérieur au moment de dépôt.
+  </p>
 
-  <button type="submit" class="btn my-4">Confirmer</button>
+  <!-- <button
+    type="submit"
+    class="btn my-4"
+    [disabled]="!ccForm.form.valid || !isRetrieveDateValid()"
+  >
+    Confirmer
+  </button> -->
 </form>
