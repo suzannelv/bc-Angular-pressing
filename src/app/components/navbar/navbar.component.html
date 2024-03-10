@@ -48,14 +48,13 @@
               <a class="dropdown-item" routerLink="/profile">Mon compte</a>
             </li>
             <li>
-              <a
-                class="dropdown-item"
-                routerLink="/auth"
-                (click)="removeUserInfo()"
-                >Se connecter</a
+              <a class="dropdown-item" routerLink="/auth">Se connecter</a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="removeUserInfo()"
+                >Déconnecter</a
               >
             </li>
-            <li><a class="dropdown-item" href="#">Déconnecter</a></li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" routerLink="/register"

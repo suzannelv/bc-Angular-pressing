@@ -5,6 +5,8 @@ import { PaymentService } from '../../services/payment.service';
 import { PaymentInterface } from '../../model/payment.interface';
 import { ClickCollectFormComponent } from '../../components/click-collect-form/click-collect-form.component';
 import { DeliveryFormComponent } from '../../components/delivery-form/delivery-form.component';
+import { AuthService } from '../../services/auth.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -23,10 +25,13 @@ export class CartComponent implements OnInit {
   totalPrice: number = 0;
   paymentsOptions: PaymentInterface[] = [];
   selectedPaymentMethod: string = '';
+  showLoginMessage = false;
 
   constructor(
     private cartService: CartService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +102,19 @@ export class CartComponent implements OnInit {
     const selectdEl = event.target as HTMLInputElement;
     this.selectedPaymentMethod = selectdEl.value;
   }
+  isFormValid(): boolean {
+    const isPaymentMethodSelected = this.selectedPaymentMethod !== '';
+    const clickCollect =
+      (this.clickCollectFormComponent?.formData &&
+        Object.keys(this.clickCollectFormComponent.formData).length > 0) ||
+      false;
+    // Vérifie si l'objet deliveryInfo a été défini et contient des clés;
+    const delivery =
+      (this.deliveryFormComponent?.deliveryInfo &&
+        Object.keys(this.deliveryFormComponent.deliveryInfo).length > 0) ||
+      false;
+    return isPaymentMethodSelected && (clickCollect || delivery);
+  }
 
   submitForms() {
     let clickCollectFormData;
@@ -107,8 +125,14 @@ export class CartComponent implements OnInit {
     } else {
       deliveryFormData = this.deliveryFormComponent?.submitForm();
     }
-    console.log('Click & Collect Form Data:', clickCollectFormData);
-    console.log('Delivery Form Data:', deliveryFormData);
-    console.log('Selected Payment Method:', this.selectedPaymentMethod);
+
+    if (!this.authService.isLoggedIn()) {
+      this.showLoginMessage = true;
+    } else {
+      this.router.navigate(['/home']);
+    }
+    // console.log('Click & Collect Form Data:', clickCollectFormData);
+    // console.log('Delivery Form Data:', deliveryFormData);
+    // console.log('Selected Payment Method:', this.selectedPaymentMethod);
   }
 }

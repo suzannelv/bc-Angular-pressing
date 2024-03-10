@@ -135,31 +135,21 @@ export class ProductDetailComponent implements OnInit {
     console.log('服务选项系数:', this.selectedServiceOptionsCoefficients);
   }
 
-  // calcul the total price of one item
+  // calculer le prix total d'un produit
   calculateItemTotalPrice(): number {
-    console.log(`计算前单品价格:`, {
-      productName: this.productSelected?.name,
-      basePrice: this.productSelected?.price,
-      quantity: this.quantity,
-      serviceCoefficients: this.selectedServiceOptionsCoefficients,
-      materialCoefficient: this.selectedMaterialCoeff,
-    });
-
     const basePrice = this.productSelected?.price || 0;
     const servicePriceIncrease = Object.values(
       this.selectedServiceOptionsCoefficients
     ).reduce((acc, coeff) => acc + coeff, 0);
 
     const materialPriceIncrease = this.selectedMaterialCoeff;
-    console.log('matière coeff:', materialPriceIncrease);
     const totalPrice =
       basePrice * (1 + servicePriceIncrease + materialPriceIncrease);
-    console.log('总价:', totalPrice);
     return parseFloat((totalPrice * this.quantity).toFixed(2));
   }
 
   onSubmit() {
-    // 为商品/选项/材料组合生成一个唯一标识符
+    // Générer un identifiant unique pour la combinaison produit/option/matériau
     const uniqueId = `${this.productSelected!['@id']}-${Object.keys(
       this.selectedOptions
     )
@@ -186,13 +176,6 @@ export class ProductDetailComponent implements OnInit {
       price: this.calculateItemTotalPrice(),
       imagePath: this.productSelected!.imagePath,
     };
-
-    console.log(
-      'Adding to cart:',
-      productSelect,
-      '单个产品总价:',
-      productSelect.price
-    );
 
     this.cartService.addProduct(productSelect);
   }

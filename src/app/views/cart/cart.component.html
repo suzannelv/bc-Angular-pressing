@@ -157,9 +157,15 @@
                     type="submit"
                     class="btn btn-secondary btn-block btn-lg"
                     (click)="submitForms()"
+                    [disabled]="!isFormValid()"
                   >
                     Passer la commande
                   </button>
+                  <p *ngIf="showLoginMessage">
+                    Pour passer votre commande, vous devez
+                    <a routerLink="/auth">vous-connecter</a> ou
+                    <a routerLink="/register">vous inscrivez</a>
+                  </p>
                   <hr class="my-4" />
                   <div>
                     <small>
@@ -173,9 +179,11 @@
                       désinscrire à tout moment en cliquant sur le lien de
                       désinscription situé en bas de l'e-mail. Si vous avez des
                       questions, vous pouvez nous écrire à
-                      <a href="#">contact&#64;mr-smiley.fr</a> ou appeler notre
-                      service client au 0666666666 (Aucun frais supplémentaire
-                      par rapport au prix de base).
+                      <a href="contact@mr-smiley.fr"
+                        >contact&#64;mr-smiley.fr</a
+                      >
+                      ou appeler notre service client au 0666666666 (Aucun frais
+                      supplémentaire par rapport au prix de base).
                     </small>
                   </div>
                 </div>

@@ -36,8 +36,8 @@ export class CartService {
   // }
 
   addProduct(product: CreateProductSelectedInterface): void {
-    console.log('加入购物车时产品价格:', product.price);
-    let currentCart = this.getProducts(); // 获取当前购物车的内容
+    // récupérer les produits dans le panier
+    let currentCart = this.getProducts();
 
     const index = currentCart.findIndex((p) => p.uniqueId === product.uniqueId);
 
@@ -46,9 +46,10 @@ export class CartService {
     } else {
       currentCart.push(product);
     }
-
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(currentCart)); // 更新localStorage
-    this.cart.next(currentCart); // 更新 BehaviorSubject 以通知订阅者购物车已更改
+    // Mise à jour les produits dans localStrage
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(currentCart));
+    // Mise à jour du BehaviorSubject pour informer les abonnés des modifications apportées au panier
+    this.cart.next(currentCart);
   }
 
   getProducts(): CartProductSelectedInterface[] {
