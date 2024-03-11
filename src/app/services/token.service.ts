@@ -25,7 +25,6 @@ export class TokenService {
 
   clearToken(): void {
     this.token = null;
-
     localStorage.removeItem('token');
   }
 }

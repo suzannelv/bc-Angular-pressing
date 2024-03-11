@@ -102,6 +102,8 @@ export class CartComponent implements OnInit {
     const selectdEl = event.target as HTMLInputElement;
     this.selectedPaymentMethod = selectdEl.value;
   }
+
+  // Fonction pour vérifier si les champs requis sont remplis ; dans le cas contraire, le bouton pour passer la commande est désactivé.
   isFormValid(): boolean {
     const isPaymentMethodSelected = this.selectedPaymentMethod !== '';
     const clickCollect =
