@@ -22,6 +22,7 @@ import { CartService } from '../../../services/cart.service';
   styleUrl: './product-detail.component.css',
 })
 export class ProductDetailComponent implements OnInit {
+  // id: string | null = null;
   productSelected: ProductInterface | undefined;
   options: ServiceOptionsInterface[] | undefined;
   materials: MaterialsInterface[] | undefined;
@@ -44,6 +45,7 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // this.id = this.route.snapshot.paramMap.get('id');
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
       this.productService
@@ -166,6 +168,7 @@ export class ProductDetailComponent implements OnInit {
 
     const productSelect: CreateProductSelectedInterface = {
       uniqueId,
+      id: this.productSelected!.id,
       product: this.productSelected!['@id'],
       productName: this.productSelected!.name,
       material: this.selectedMaterial!,

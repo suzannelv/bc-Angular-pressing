@@ -12,6 +12,15 @@
   <p
     class="text-danger"
     *ngIf="
+      !isDepositDateValid() &&
+      (ccForm.submitted || depositRef.dirty || depositRef.touched)
+    "
+  >
+    La date de dépôt ne peut pas être antérieure à la date d'aujourd'hui.
+  </p>
+  <p
+    class="text-danger"
+    *ngIf="
       depositRef.invalid &&
       (depositRef.dirty || depositRef.touched || ccForm.submitted)
     "
@@ -36,6 +45,7 @@
   >
     Il faut choisir une date de retrait
   </p>
+
   <p
     class="text-danger"
     *ngIf="

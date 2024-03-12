@@ -4,6 +4,7 @@ import { ClientInfo } from '../../model/clientInfo.interface';
 import { NgForm } from '@angular/forms';
 import { isDateAfter } from '../../utils/isDateAfter';
 import { FormDataService } from '../../services/form-data.service';
+import { isDateBeforeToday } from '../../utils/isDateBeforeToday';
 
 @Component({
   selector: 'app-delivery-form',
@@ -45,6 +46,12 @@ export class DeliveryFormComponent implements OnInit {
     }
   }
 
+  isDepositDateValid(): boolean {
+    // Si aucune date n'est choisie, considérer comme valide pour ne pas bloquer la validation initiale
+    if (!this.deliveryInfo.depositDate) return true;
+    return !isDateBeforeToday(this.deliveryInfo.depositDate);
+  }
+
   // comparer les dates de dépôt et de retrait, la date de retraint ne peut pas avant celle de dépôt
   isDeliveryDateValid(): boolean {
     if (this.deliveryInfo.depositDate && this.deliveryInfo.retrieveDate) {
@@ -61,7 +68,11 @@ export class DeliveryFormComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.myForm?.valid && this.isDeliveryDateValid()) {
+    if (
+      this.myForm?.valid &&
+      this.isDeliveryDateValid() &&
+      this.isDepositDateValid()
+    ) {
       return this.myForm.value;
     } else {
       return null;

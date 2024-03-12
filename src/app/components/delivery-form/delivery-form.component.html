@@ -19,6 +19,16 @@
     >
       Il faut choisir une date de dépôt
     </p>
+    <p
+      class="text-danger"
+      *ngIf="
+        !isDepositDateValid() &&
+        (depositRef.dirty || depositRef.touched || deliveryForm.submitted)
+      "
+    >
+      La date de dépôt ne peut pas être antérieure à la date d'aujourd'hui.
+    </p>
+
     <label for="retrieveDate" class="fw-medium mt-4">Date de livraison</label>
     <input
       type="date"

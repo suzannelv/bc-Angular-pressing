@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, ViewChild } from '@angular/core';
-import { FormDataService } from '../../services/form-data.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { isDateAfter } from '../../utils/isDateAfter';
 import { NgForm } from '@angular/forms';
+import { isDateBeforeToday } from '../../utils/isDateBeforeToday';
 
 @Component({
   selector: 'app-click-collect-form',
@@ -22,6 +22,12 @@ export class ClickCollectFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
     }
+  }
+
+  isDepositDateValid(): boolean {
+    // Si aucune date n'est choisie, ne pas invalider le champ
+    if (!this.formData.depositDate) return true;
+    return !isDateBeforeToday(this.formData.depositDate);
   }
 
   isRetrieveDateValid(): boolean {
