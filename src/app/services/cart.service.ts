@@ -89,7 +89,7 @@ export class CartService {
       console.log(
         `服务中价格: ${item.productName}, Quantity: ${item.quantity}, Price: ${item.price}`
       );
-      total += item.price;
+      total += item.price * item.quantity;
     });
     console.log('Calculated cart total:', total);
     return parseFloat(total.toFixed(2));

@@ -84,6 +84,7 @@ export class CartComponent implements OnInit {
 
   increment(item: CartProductSelectedInterface) {
     item.quantity++;
+    this.updateCart();
   }
 
   updateCart() {
