@@ -1,3 +1,9 @@
 .bg-color {
   background-color: var(--secondary-color);
 }
+
+.empty-cart {
+  background-image: url("https://img.freepik.com/photos-gratuite/panier-achat-isole-fond-blanc_460848-14050.jpg?t=st=1710455397~exp=1710458997~hmac=8ba851eaaea2dd728c9fdd05e7d4f86326984100a0c7336e8f86923254610a00&w=1800");
+  height: 800px;
+  opacity: 0.8;
+}

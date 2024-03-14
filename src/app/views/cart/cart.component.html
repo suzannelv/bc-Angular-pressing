@@ -191,15 +191,21 @@
                 </div>
               </div>
             </div>
-
-            <!-- Afficher ce message si le panier est vide -->
-
-            <ng-template #emptyCart>
-              <h2>Votre panier est vide</h2>
-            </ng-template>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- Afficher ce message si le panier est vide -->
+
+  <ng-template #emptyCart>
+    <div
+      class="empty-cart d-flex flex-column align-items-center justify-content-center"
+    >
+      <h1 class="my-5">Votre panier est vide</h1>
+      <a class="btn btn-lg btn-warning" routerLink="/categories"
+        >Découvrir nos service</a
+      >
+    </div>
+  </ng-template>
 </section>

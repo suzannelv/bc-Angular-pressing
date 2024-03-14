@@ -45,8 +45,8 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.id = this.route.snapshot.paramMap.get('id');
     const productId = this.route.snapshot.paramMap.get('id');
+
     if (productId) {
       this.productService
         .getProductById(Number(productId))
@@ -179,6 +179,7 @@ export class ProductDetailComponent implements OnInit {
       price: this.calculateItemTotalPrice(),
       imagePath: this.productSelected!.imagePath,
     };
+    console.log('Adding product to cart:', productSelect);
 
     this.cartService.addProduct(productSelect);
   }
