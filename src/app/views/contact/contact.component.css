@@ -1,0 +1,12 @@
+.fa-solid,
+.fa-regular {
+  color: var(--primary-color);
+}
+.link-contact {
+  text-decoration: none;
+  color: #333;
+}
+.submit-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+}

@@ -1,7 +1,94 @@
-<div *ngIf="clientData">
-  <h2>User Profile</h2>
-  <p>Email: {{ clientData.email }}</p>
-  <p>Firstname: {{ clientData.firstname }}</p>
-  <p>Lastname: {{ clientData.lastname }}</p>
-  <p>adress: {{ clientData.adress }}</p>
+<div *ngIf="clientData" class="d-flex g-4 align-items-start mt-5 p-5">
+  <div
+    class="nav flex-column nav-pills me-5"
+    id="v-pills-tab"
+    role="tablist"
+    aria-orientation="vertical"
+  >
+    <h1 class="fs-3 text-center">Votre compte</h1>
+    <button
+      class="nav-link active mt-3"
+      id="v-pills-info-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-info"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-info"
+      aria-selected="true"
+    >
+      Données personnelles
+    </button>
+    <button
+      class="nav-link"
+      id="v-pills-address-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-address"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-address"
+      aria-selected="false"
+    >
+      address
+    </button>
+
+    <button
+      class="nav-link"
+      id="v-pills-orders-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-orders"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-orders"
+      aria-selected="false"
+    >
+      Historique de commandes
+    </button>
+    <a href="#" class="text-center nav-link" type="button">
+      <i class="fa-regular fa-circle-question"></i> Aide et FAQ
+    </a>
+  </div>
+  <div class="tab-content ms-5" id="v-pills-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="v-pills-info"
+      role="tabpanel"
+      aria-labelledby="v-pills-info-tab"
+      tabindex="0"
+    >
+      <h2 class="fs-4">Données personnelles</h2>
+      <div class="d-flex justify-content-between my-5">
+        <i class="fa-regular fa-user fs-1"></i>
+        <div class="ms-5">
+          <p><strong>Numéro client: </strong> {{ clientData.clientNumber }}</p>
+          <p><strong>Nom: </strong> {{ clientData.firstname }}</p>
+          <p><strong>Prénom: </strong> {{ clientData.lastname }}</p>
+          <p><strong>Adresse e-mail:</strong> {{ clientData.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="v-pills-address"
+      role="tabpanel"
+      aria-labelledby="v-pills-address-tab"
+      tabindex="0"
+    >
+      <div class="d-flex justify-content-between my-5">
+        <i class="fa-solid fa-location-dot fs-1"></i>
+        <div class="ms-5">
+          <p><strong>addresse:</strong> {{ clientData.adress }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="v-pills-orders"
+      role="tabpanel"
+      aria-labelledby="v-pills-orders-tab"
+      tabindex="0"
+    >
+      Vous avez 0 commande
+    </div>
+  </div>
 </div>

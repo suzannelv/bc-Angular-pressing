@@ -11,6 +11,7 @@ import { ProductDetailComponent } from './views/product/product-detail/product-d
 import { WelcomeComponent } from './views/welcome/welcome.component';
 import { UserProfileComponent } from './views/user-profile/user-profile.component';
 import { AuthService } from './services/auth.service';
+import { ContactComponent } from './views/contact/contact.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'categories', component: CategoryComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'contact', component: ContactComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'register', component: RegistrationComponent },
   { path: 'welcome/:username', component: WelcomeComponent },
