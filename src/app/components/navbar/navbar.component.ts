@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { TokenService } from '../../services/token.service';
 import { AuthService } from '../../services/auth.service';
@@ -11,17 +11,23 @@ import { AuthService } from '../../services/auth.service';
 export class NavbarComponent implements OnInit {
   profilImage = 'assets/user-circle.svg';
   quantityInCart: number = 0;
+  isLoggedIn: boolean = false;
 
   constructor(
     private cartService: CartService,
     private tokenService: TokenService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.authService.isLoggedIn$.subscribe((status) => {
+      this.isLoggedIn = status;
+    });
     this.updateQuantityInCart();
     this.cartService.cart$.subscribe((products) => {
       this.updateQuantityInCart();
+      this.cdr.detectChanges();
     });
   }
 

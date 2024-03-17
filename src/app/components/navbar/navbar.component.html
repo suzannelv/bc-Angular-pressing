@@ -44,24 +44,29 @@
           </a>
 
           <ul class="dropdown-menu text-small shadow">
-            <li>
-              <a class="dropdown-item" routerLink="/profile">Mon compte</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/auth">Se connecter</a>
-            </li>
-            <li>
-              <a class="dropdown-item" (click)="removeUserInfo()"
-                >Déconnecter</a
-              >
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" routerLink="/register"
-                >Pas de compte? <br />
-                Inscrivez-vous</a
-              >
-            </li>
+            <ng-container *ngIf="isLoggedIn; else signInOrRegister">
+              <li>
+                <a class="dropdown-item" routerLink="/profile">Mon compte</a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="removeUserInfo()"
+                  >Déconnecter</a
+                >
+              </li>
+            </ng-container>
+            <ng-template #signInOrRegister>
+              <li>
+                <a class="dropdown-item" routerLink="/auth">Se connecter</a>
+              </li>
+
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" routerLink="/register"
+                  >Pas de compte? <br />
+                  Inscrivez-vous</a
+                >
+              </li>
+            </ng-template>
           </ul>
         </div>
         <li class="nav-item ms-3">

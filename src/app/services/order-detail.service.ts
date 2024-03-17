@@ -23,4 +23,17 @@ export class OrderDetailService {
       })
     );
   }
+
+  createOrder(
+    orderDetail: OrderDetailInterface
+  ): Observable<OrderDetailInterface> {
+    return this.http
+      .post<OrderDetailInterface>(`${BASE_URL}order_details`, orderDetail)
+      .pipe(
+        catchError((error) => {
+          console.error('An error occurred:', error);
+          return throwError(() => new Error('Failed to create order.'));
+        })
+      );
+  }
 }

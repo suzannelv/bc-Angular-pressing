@@ -3,7 +3,8 @@ import {
   CartProductSelectedInterface,
   CreateProductSelectedInterface,
 } from '../model/productSelected.interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { AuthService } from './auth.service';
 
 const CART_STORAGE_KEY = 'cart';
 
@@ -17,23 +18,6 @@ export class CartService {
   cart$ = this.cart.asObservable();
 
   constructor() {}
-
-  // addProduct(product: CreateProductSelectedInterface): void {
-  //   const cartLocalStorage = localStorage.getItem(CART_STORAGE_KEY);
-
-  //   let cart: CartProductSelectedInterface[];
-
-  //   if (cartLocalStorage === null) {
-  //     // Panier vide : non défini dans le localStorage
-  //     cart = [];
-  //   } else {
-  //     // Panier existant : on transforme la chaîne de caractères en tableau de produits
-  //     cart = JSON.parse(cartLocalStorage) as CartProductSelectedInterface[];
-  //   }
-
-  //   cart.push(product);
-  //   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-  // }
 
   addProduct(product: CreateProductSelectedInterface): void {
     // récupérer les produits dans le panier
@@ -59,10 +43,10 @@ export class CartService {
     if (cartLocalStorage === null) {
       return [];
     }
-    console.log('Loaded cart items:', JSON.parse(cartLocalStorage));
+    // console.log('Loaded cart items:', JSON.parse(cartLocalStorage));
 
     const cart = JSON.parse(cartLocalStorage) as CartProductSelectedInterface[];
-    console.log('Loaded cart items from localStorage:', cart);
+    // console.log('Loaded cart items from localStorage:', cart);
     return cart;
   }
 
@@ -86,12 +70,12 @@ export class CartService {
   calculateTotalPrice(items: CartProductSelectedInterface[]): number {
     let total = 0;
     items.forEach((item) => {
-      console.log(
-        `服务中价格: ${item.productName}, Quantity: ${item.quantity}, Price: ${item.price}`
-      );
+      // console.log(
+      //   `服务中价格: ${item.productName}, Quantity: ${item.quantity}, Price: ${item.price}`
+      // );
       total += item.price * item.quantity;
     });
-    console.log('Calculated cart total:', total);
+    // console.log('Calculated cart total:', total);
     return parseFloat(total.toFixed(2));
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { CartProductSelectedInterface } from '../../model/productSelected.interface';
 import { PaymentService } from '../../services/payment.service';
@@ -7,6 +7,10 @@ import { ClickCollectFormComponent } from '../../components/click-collect-form/c
 import { DeliveryFormComponent } from '../../components/delivery-form/delivery-form.component';
 import { AuthService } from '../../services/auth.service';
 import { Route, Router } from '@angular/router';
+import { ClientInfo } from '../../model/clientInfo.interface';
+import { OrderDetailService } from '../../services/order-detail.service';
+import { OrderDetailInterface } from '../../model/orderDetail.interface';
+import { ProductSelectedService } from '../../services/product-selected.service';
 
 @Component({
   selector: 'app-cart',
@@ -26,24 +30,51 @@ export class CartComponent implements OnInit {
   paymentsOptions: PaymentInterface[] = [];
   selectedPaymentMethod: string = '';
   showLoginMessage = false;
+  clientInfo: ClientInfo | null = null;
+  isLoadingClientInfo: boolean = true;
 
   constructor(
     private cartService: CartService,
     private paymentService: PaymentService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private orderDetailService: OrderDetailService,
+    private productSelectedService: ProductSelectedService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.cartService.cart$.subscribe((newCart) => {
-      console.log('购物车已更新', newCart);
+      // console.log('购物车已更新', newCart);
       this.items = newCart;
+      console.log(this.items);
       this.totalPrice = this.cartService.calculateTotalPrice(newCart);
       this.totalQuantity = this.cartService.getTotalQuantity();
     });
     // 初始加载购物车
     this.loadInitialCart();
     this.getPayments();
+    this.getClientInfo();
+  }
+
+  getClientInfo() {
+    if (this.authService.isLoggedIn()) {
+      this.isLoadingClientInfo = true; // Début du chargement
+      this.authService.getCurrentUser().subscribe({
+        next: (data) => {
+          this.clientInfo = data;
+          console.log('购物车中客人信息：', this.clientInfo);
+          this.isLoadingClientInfo = false; // Fin du chargement
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoadingClientInfo = false; // Assurez-vous de gérer le chargement en cas d'erreur également
+        },
+      });
+    } else {
+      console.log("Utilisateur n'est pas connecté");
+      this.isLoadingClientInfo = false;
+    }
   }
 
   loadInitialCart() {
@@ -59,7 +90,7 @@ export class CartComponent implements OnInit {
   getPayments() {
     this.paymentService.getPaymentMethods().subscribe((res) => {
       this.paymentsOptions = res['hydra:member'];
-      console.log(this.paymentsOptions);
+      // console.log(this.paymentsOptions);
     });
   }
 
@@ -119,10 +150,9 @@ export class CartComponent implements OnInit {
     return isPaymentMethodSelected && (clickCollect || delivery);
   }
 
-  submitForms() {
+  submitOrder() {
     let clickCollectFormData;
     let deliveryFormData;
-
     if (!this.isDelivery) {
       clickCollectFormData = this.clickCollectFormComponent?.submitForm();
     } else {
@@ -131,11 +161,57 @@ export class CartComponent implements OnInit {
 
     if (!this.authService.isLoggedIn()) {
       this.showLoginMessage = true;
-    } else {
-      this.router.navigate(['/home']);
+      this.cdRef.detectChanges();
+      return;
     }
-    // console.log('Click & Collect Form Data:', clickCollectFormData);
-    // console.log('Delivery Form Data:', deliveryFormData);
-    // console.log('Selected Payment Method:', this.selectedPaymentMethod);
+
+    if (this.isLoadingClientInfo || !this.clientInfo) {
+      console.error(
+        'Les informations du client sont encore en cours de chargement ou manquantes.'
+      );
+      return;
+    }
+    // Convertissez les chaînes de caractères en objets Date avec une valeur par défaut si undefined
+    const depositDateString: string =
+      this.deliveryFormComponent?.deliveryInfo.depositDate ?? '';
+    const retrieveDateString: string =
+      this.deliveryFormComponent?.deliveryInfo.retrieveDate ?? '';
+
+    // Créez les objets Date à partir des chaînes de caractères
+    const depositDate: Date = depositDateString
+      ? new Date(depositDateString)
+      : new Date();
+    const retrieveDate: Date = retrieveDateString
+      ? new Date(retrieveDateString)
+      : new Date();
+
+    // Vérifiez que les conversions sont valides (non NaN)
+    if (isNaN(depositDate.getTime()) || isNaN(retrieveDate.getTime())) {
+      console.error('Invalid date');
+      return;
+    }
+
+    // let ClientId = '/api/clients/' + this.clientInfo?.id;
+    // const orderDetail: OrderDetailInterface = {
+    //   depositDate: depositDate,
+    //   retrieveDate: retrieveDate,
+    //   payment: this.selectedPaymentMethod,
+    //   client: ClientId,
+    //   emp: '/api/employees/616',
+    //   orderStatus: '/api/order_statuses/157',
+    //   delivery: this.isDelivery,
+    //   productSelected: productSelectedData,
+    // };
+    // console.log(orderDetail);
+
+    // this.orderDetailService.createOrder(orderDetail).subscribe({
+    //   next: (response) => {
+    //     console.log('order created successfully', response);
+    //     // this.router.navigate(['/order-success']);
+    //   },
+    //   error: (error) => {
+    //     console.error('Failed to create order', error);
+    //   },
+    // });
   }
 }

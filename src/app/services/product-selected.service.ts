@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  CreateProductSelectedInterface,
   ProductSelectedInterface,
   ProductSelectedResponse,
 } from '../model/productSelected.interface';
@@ -24,6 +25,27 @@ export class ProductSelectedService {
               new Error(
                 'An error occurred while fetching the product selected.'
               )
+          );
+        })
+      );
+  }
+
+  createProductSelected(
+    productSelectedData: CreateProductSelectedInterface
+  ): Observable<CreateProductSelectedInterface> {
+    return this.http
+      .post<CreateProductSelectedInterface>(
+        `${BASE_URL}product_selecteds`,
+        productSelectedData
+      )
+      .pipe(
+        catchError((error) => {
+          console.error(
+            'An error occurred while creating product selected:',
+            error
+          );
+          return throwError(
+            () => new Error('Failed to create product selected.')
           );
         })
       );

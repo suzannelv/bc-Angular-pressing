@@ -1,15 +1,17 @@
 import { OrderStatusInterface } from './orderStatus.interface';
 import { PaymentInterface } from './payment.interface';
+import { ProductSelectedInterface } from './productSelected.interface';
 import { UserInterface } from './user.interface';
 
 export interface OrderDetailInterface {
-  id: number;
   depositDate: Date;
   retrieveDate: Date;
-  orderNumber: string;
-  payment: PaymentInterface;
-  client: UserInterface;
-  orderStatus: OrderStatusInterface;
+  payment: string;
+  client: string;
+  emp: string;
+  orderStatus: string;
+  delivery: boolean;
+  productSelected: any[];
 }
 
 export interface orderDetailResponse {

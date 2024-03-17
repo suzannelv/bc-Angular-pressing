@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BASE_URL } from '../constants/api-constants';
-import { Observable, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { TokenService } from './token.service';
 import { TokenInterface } from '../model/token.interface';
 import { ClientInfo } from '../model/clientInfo.interface';
@@ -12,12 +12,20 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private tokenExpirationTimer: any;
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
     private router: Router
   ) {}
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
+  }
+  get isLoggedIn$(): Observable<boolean> {
+    return this.loggedIn.asObservable();
+  }
 
   login(email: string, password: string): Observable<TokenInterface> {
     return this.http
@@ -26,8 +34,13 @@ export class AuthService {
         password: password,
       })
       .pipe(
-        catchError(() => {
-          return throwError(() => new Error());
+        tap((response) => {
+          this.storeToken(response.token);
+          this.loggedIn.next(true);
+        }),
+        catchError((error) => {
+          console.error('Login failed:', error);
+          return throwError(() => new Error('Login failed'));
         })
       );
   }
@@ -45,6 +58,7 @@ export class AuthService {
   // se déconnecter et arrêter counter
   logout() {
     this.tokenService.clearToken();
+    this.loggedIn.next(false);
     this.router.navigate(['/auth']);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);

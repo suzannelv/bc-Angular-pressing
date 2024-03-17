@@ -15,17 +15,17 @@ export interface ProductSelectedResponse {
 }
 
 export interface CreateProductSelectedInterface {
-  id: number;
+  id?: number;
   uniqueId: string;
   product: string;
   productName: string;
   material: string;
-  materialCoefficent: number;
+  materialCoefficent?: number;
   serviceOptions: string[];
-  serviceCoefficent: number[];
+  serviceCoefficent?: number[];
   quantity: number;
   price: number;
-  imagePath: string;
+  imagePath?: string;
 }
 
 export interface CartProductSelectedInterface
