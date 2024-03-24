@@ -25,6 +25,10 @@ export class CategoryService {
   }
 
   getChildCategory(childId: number): Observable<CategoryInterface> {
+    if (childId == null || childId <= 0) {
+      console.error(`Invalid childId: ${childId}`);
+      return throwError(() => new Error('Invalid childId provided'));
+    }
     return this.http
       .get<CategoryInterface>(`${BASE_URL}categories/${childId}`)
       .pipe(

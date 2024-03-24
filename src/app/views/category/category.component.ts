@@ -114,28 +114,29 @@ export class CategoryComponent implements OnInit {
     parentCategory: CategoryInterface
   ): Promise<void> {
     if (parentCategory.child && parentCategory.child.length > 0) {
-      // 假设这里需要异步获取子类别的详细信息
-      const childIds = parentCategory.child.map((url) => {
-        const parts = url.toString().split('/');
-        console.log('parts:', parts);
-        console.log(parts[parts.length - 1]);
-        return parts[parts.length - 1];
-      });
-      console.log('Child IDs:', childIds);
+      const childIds = parentCategory.child
+        .map((url) => {
+          const parts = url.toString().split('/');
+          const childId = Number(parts[parts.length - 1]);
+          return childId;
+        })
+        .filter((id) => !isNaN(id) && id != null);
 
-      // 异步获取第一个子类别的详细信息
+      // Récupérer les produits de la première sous-catégorie
       if (childIds.length > 0) {
         const firstChildId = childIds[0];
 
         console.log('Loading child category for ID:', firstChildId);
-        try {
-          const childDetail = await firstValueFrom(
-            this.categoryService.getChildCategory(+firstChildId)
-          );
-          console.log('Loaded child category:', childDetail);
-          this.getSubCategory({ id: childDetail.id, name: childDetail.name });
-        } catch (error) {
-          console.error('Error loading child category details:', error);
+        if (firstChildId != null) {
+          try {
+            const childDetail = await firstValueFrom(
+              this.categoryService.getChildCategory(+firstChildId)
+            );
+            console.log('Loaded child category:', childDetail);
+            this.getSubCategory({ id: childDetail.id, name: childDetail.name });
+          } catch (error) {
+            console.error('Error loading child category details:', error);
+          }
         }
       }
     }

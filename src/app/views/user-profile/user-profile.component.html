@@ -73,10 +73,64 @@
       aria-labelledby="v-pills-address-tab"
       tabindex="0"
     >
-      <div class="d-flex justify-content-between my-5">
+      <div class="d-flex justify-content-between my-5 align-items-center">
         <i class="fa-solid fa-location-dot fs-1"></i>
         <div class="ms-5">
-          <p><strong>addresse:</strong> {{ clientData.adress }}</p>
+          <p class="mt-3"><strong>addresse:</strong> {{ clientData.adress }}</p>
+        </div>
+        <i
+          data-bs-toggle="modal"
+          data-bs-target="#modalAddresse"
+          class="fa-solid fa-pen-to-square ms-3"
+        ></i>
+      </div>
+      <!-- modal pour modifier l'adresse -->
+      <div
+        class="modal fade"
+        id="modalAddresse"
+        tabindex="-1"
+        aria-labelledby="modalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="modalLabel">Nouveau adresse</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form #newAddress="ngForm" (ngSubmit)="onSubmit(newAddress)">
+                <div class="mb-3">
+                  <label for="adress" class="col-form-label">Addresse</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="adress"
+                    name="adress"
+                    ngModel
+                  />
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Fermer
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    Confirmer
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
