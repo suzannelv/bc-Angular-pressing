@@ -116,9 +116,6 @@ export class ProductDetailComponent implements OnInit {
 
   handleOptionChange(e: Event): void {
     const checkbox = e.target as HTMLInputElement;
-    // const optionIri = checkbox.value;
-    // this.selectedOptions[optionIri] = checkbox.checked;
-    // 当选项被选中时，找到该选项的系数并存储
 
     const optionId = checkbox.value;
     this.selectedOptions[optionId] = checkbox.checked;
@@ -177,7 +174,7 @@ export class ProductDetailComponent implements OnInit {
       serviceCoefficent: serviceCoefficientsArray,
       quantity: this.quantity,
       price: this.calculateItemTotalPrice(),
-      imagePath: this.productSelected!.imagePath,
+      contentUrl: this.productSelected!.contentUrl,
     };
     console.log('Adding product to cart:', productSelect);
 

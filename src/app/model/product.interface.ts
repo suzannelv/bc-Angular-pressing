@@ -10,6 +10,7 @@ export interface ProductInterface {
   description: string;
   productStatus: ProductStatusInterface;
   imagePath: string;
+  contentUrl: string;
 }
 
 export interface ProductResponse {

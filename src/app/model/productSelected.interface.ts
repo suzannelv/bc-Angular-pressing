@@ -26,6 +26,7 @@ export interface CreateProductSelectedInterface {
   quantity: number;
   price: number;
   imagePath?: string;
+  contentUrl?: string;
 }
 
 export interface CartProductSelectedInterface

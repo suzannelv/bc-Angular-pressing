@@ -191,27 +191,34 @@ export class CartComponent implements OnInit {
       return;
     }
 
-    // let ClientId = '/api/clients/' + this.clientInfo?.id;
-    // const orderDetail: OrderDetailInterface = {
-    //   depositDate: depositDate,
-    //   retrieveDate: retrieveDate,
-    //   payment: this.selectedPaymentMethod,
-    //   client: ClientId,
-    //   emp: '/api/employees/616',
-    //   orderStatus: '/api/order_statuses/157',
-    //   delivery: this.isDelivery,
-    //   productSelected: productSelectedData,
-    // };
-    // console.log(orderDetail);
+    let ClientId = '/api/clients/' + this.clientInfo?.id;
+    const orderDetail: OrderDetailInterface = {
+      depositDate: depositDate,
+      retrieveDate: retrieveDate,
+      payment: this.selectedPaymentMethod,
+      client: ClientId,
+      emp: '/api/employees/652',
+      orderStatus: '/api/order_statuses/162',
+      delivery: this.isDelivery,
+      productSelected: [
+        {
+          product: '/api/products/499',
+          material: '/api/materials/79',
+          totalPrice: 45,
+          quantity: 3,
+        },
+      ],
+    };
+    console.log(orderDetail);
 
-    // this.orderDetailService.createOrder(orderDetail).subscribe({
-    //   next: (response) => {
-    //     console.log('order created successfully', response);
-    //     // this.router.navigate(['/order-success']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Failed to create order', error);
-    //   },
-    // });
+    this.orderDetailService.createOrder(orderDetail).subscribe({
+      next: (response) => {
+        console.log('order created successfully', response);
+        // this.router.navigate(['/order-success']);
+      },
+      error: (error) => {
+        console.error('Failed to create order', error);
+      },
+    });
   }
 }
