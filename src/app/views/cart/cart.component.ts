@@ -11,6 +11,7 @@ import { ClientInfo } from '../../model/clientInfo.interface';
 import { OrderDetailService } from '../../services/order-detail.service';
 import { OrderDetailInterface } from '../../model/orderDetail.interface';
 import { ProductSelectedService } from '../../services/product-selected.service';
+import { materialize } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -55,6 +56,13 @@ export class CartComponent implements OnInit {
     this.loadInitialCart();
     this.getPayments();
     this.getClientInfo();
+    // const allProductsSelecte = this.items.map((item) => ({
+    //   product: item.product,
+    //   material: item.material,
+    //   totalPrice: item.price,
+    //   quantity: item.quantity,
+    // }));
+    // console.log('allProductsSelected:', allProductsSelecte);
   }
 
   getClientInfo() {
@@ -79,6 +87,7 @@ export class CartComponent implements OnInit {
 
   loadInitialCart() {
     this.items = this.cartService.getProducts();
+    console.log(this.items);
     this.totalPrice = this.cartService.calculateTotalPrice(this.items);
     this.totalQuantity = this.cartService.getTotalQuantity();
   }
@@ -191,6 +200,14 @@ export class CartComponent implements OnInit {
       return;
     }
 
+    const allProductsSelecte = this.items.map((item) => ({
+      product: item.product,
+      material: item.material,
+      totalPrice: item.price,
+      quantity: item.quantity,
+    }));
+    console.log('allProductsSelected:', allProductsSelecte);
+
     let ClientId = '/api/clients/' + this.clientInfo?.id;
     const orderDetail: OrderDetailInterface = {
       depositDate: depositDate,
@@ -200,14 +217,7 @@ export class CartComponent implements OnInit {
       emp: '/api/employees/652',
       orderStatus: '/api/order_statuses/162',
       delivery: this.isDelivery,
-      productSelected: [
-        {
-          product: '/api/products/499',
-          material: '/api/materials/79',
-          totalPrice: 45,
-          quantity: 3,
-        },
-      ],
+      productSelected: allProductsSelecte,
     };
     console.log(orderDetail);
 

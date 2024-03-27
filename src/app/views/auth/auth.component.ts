@@ -20,7 +20,7 @@ export class AuthComponent {
     this.authService.login(email, password).subscribe((res) => {
       console.log(res.token);
       this.authService.storeToken(res.token);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/profile']);
     });
   }
 }
