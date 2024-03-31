@@ -23,6 +23,7 @@ export class AuthService {
   private hasToken(): boolean {
     return !!localStorage.getItem('token');
   }
+
   get isLoggedIn$(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
@@ -47,6 +48,8 @@ export class AuthService {
 
   storeToken(token: string): void {
     this.tokenService.setToken(token);
+    const expirationDate = new Date(new Date().getTime() + 3600000);
+    localStorage.setItem('expiration', expirationDate.toISOString());
     this.autoLogout(3600000);
   }
 
@@ -57,6 +60,7 @@ export class AuthService {
 
   // se déconnecter et arrêter counter
   logout() {
+    console.log('Logging out...');
     this.tokenService.clearToken();
     this.loggedIn.next(false);
     this.router.navigate(['/auth']);
@@ -67,13 +71,32 @@ export class AuthService {
   }
 
   // déclancher auto déconnection au bout d'une durée donnée
+  // autoLogout(expirationDuration: number) {
+  //   if (this.tokenExpirationTimer) {
+  //     clearTimeout(this.tokenExpirationTimer);
+  //   }
+  //   this.tokenExpirationTimer = setTimeout(() => {
+  //     this.logout();
+  //   }, expirationDuration);
+  // }
   autoLogout(expirationDuration: number) {
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
+    const expirationDateString = localStorage.getItem('expiration');
+    if (!expirationDateString) {
+      return;
     }
-    this.tokenExpirationTimer = setTimeout(() => {
+    const expirationDate = new Date(expirationDateString);
+    const now = new Date();
+    const timeToLogout = expirationDate.getTime() - now.getTime();
+    if (timeToLogout <= 0) {
       this.logout();
-    }, expirationDuration);
+    } else {
+      if (this.tokenExpirationTimer) {
+        clearTimeout(this.tokenExpirationTimer);
+      }
+      this.tokenExpirationTimer = setTimeout(() => {
+        this.logout();
+      }, timeToLogout);
+    }
   }
 
   // si l'utilisateur est connecter, récupérer ses infos

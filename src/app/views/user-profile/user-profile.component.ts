@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { ClientInfo } from '../../model/clientInfo.interface';
 import { ClientService } from '../../services/client.service';
 import { NgForm } from '@angular/forms';
+import { OrderDetailInterface } from '../../model/orderDetail.interface';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,6 +12,7 @@ import { NgForm } from '@angular/forms';
 })
 export class UserProfileComponent implements OnInit {
   clientData: ClientInfo | null = null;
+  orderDetails: OrderDetailInterface[] = [];
 
   constructor(
     private authService: AuthService,
@@ -26,6 +28,8 @@ export class UserProfileComponent implements OnInit {
       this.authService.getCurrentUser().subscribe({
         next: (data) => {
           this.clientData = data;
+          console.log('client info in account:', this.clientData);
+          this.loadOrderdetails();
         },
         error: (error) => {
           console.error(error);
@@ -33,6 +37,21 @@ export class UserProfileComponent implements OnInit {
       });
     } else {
       console.log("Utilisateur n'est pas connecté");
+    }
+  }
+
+  loadOrderdetails() {
+    const clientId = this.clientData?.id;
+    if (clientId) {
+      this.clientService.getOrderListByClientId(clientId).subscribe({
+        next: (data) => {
+          this.orderDetails = data['hydra:member'];
+          console.log('订单详情:', this.orderDetails);
+        },
+        error: (error) => {
+          console.error('Error loading order details:', error);
+        },
+      });
     }
   }
   onSubmit(data: NgForm) {
@@ -48,7 +67,6 @@ export class UserProfileComponent implements OnInit {
           },
           error: (error) => {
             console.error(error);
-            // Handle the error state
           },
         });
       }

@@ -11,6 +11,8 @@ export interface OrderDetailInterface {
   emp: string;
   orderStatus: string;
   delivery: boolean;
+  orderNumber?: string;
+  createdAt?: Date;
   productSelected: any[];
 }
 

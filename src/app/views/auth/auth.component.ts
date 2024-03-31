@@ -18,7 +18,6 @@ export class AuthComponent {
     const password = form.value.password;
 
     this.authService.login(email, password).subscribe((res) => {
-      console.log(res.token);
       this.authService.storeToken(res.token);
       this.router.navigate(['/profile']);
     });

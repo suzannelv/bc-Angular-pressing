@@ -48,6 +48,7 @@
     </a>
   </div>
   <div class="tab-content ms-5" id="v-pills-tabContent">
+    <!-- infos personnelles -->
     <div
       class="tab-pane fade show active"
       id="v-pills-info"
@@ -62,10 +63,13 @@
           <p><strong>Numéro client: </strong> {{ clientData.clientNumber }}</p>
           <p><strong>Nom: </strong> {{ clientData.firstname }}</p>
           <p><strong>Prénom: </strong> {{ clientData.lastname }}</p>
+          <p><strong>Tél: </strong> {{ clientData.phoneNumber }}</p>
           <p><strong>Adresse e-mail:</strong> {{ clientData.email }}</p>
         </div>
       </div>
     </div>
+
+    <!-- addresse -->
     <div
       class="tab-pane fade"
       id="v-pills-address"
@@ -76,7 +80,7 @@
       <div class="d-flex justify-content-between my-5 align-items-center">
         <i class="fa-solid fa-location-dot fs-1"></i>
         <div class="ms-5">
-          <p class="mt-3"><strong>addresse:</strong> {{ clientData.adress }}</p>
+          <p class="mt-3"><strong>Addresse:</strong> {{ clientData.adress }}</p>
         </div>
         <i
           data-bs-toggle="modal"
@@ -134,15 +138,56 @@
         </div>
       </div>
     </div>
+    <!-- Historique de commande -->
 
     <div
+      *ngIf="orderDetails.length > 0; else noOrders"
       class="tab-pane fade"
       id="v-pills-orders"
       role="tabpanel"
       aria-labelledby="v-pills-orders-tab"
       tabindex="0"
     >
-      Vous avez 0 commande
+      <h2><i class="fa-solid fa-clock-rotate-left mr-2"></i> Commanades</h2>
+      <div *ngFor="let order of orderDetails" class="card mt-5 d-flex">
+        <div class="card-header">
+          <p>
+            <strong>Date:</strong> {{ order.createdAt | date : "mediumDate" }}
+          </p>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            <strong>Numéro de commande :</strong> {{ order.orderNumber }}
+          </h5>
+          <p>
+            <strong>Date de dépôt:</strong>
+            {{ order.depositDate | date : "mediumDate" }}
+          </p>
+          <p>
+            <strong>Date de retrait:</strong>
+            {{ order.retrieveDate | date : "mediumDate" }}
+          </p>
+        </div>
+      </div>
     </div>
+
+    <ng-template #noOrders>
+      <div
+        class="tab-pane fade"
+        id="v-pills-orders"
+        role="tabpanel"
+        aria-labelledby="v-pills-orders-tab"
+        tabindex="0"
+      >
+        <h2>Vous avez 0 commande</h2>
+        <p>
+          <a
+            href="/categories"
+            class="link-warning link-offset-2 link-underline-opacity-100-hover"
+            >Découvir nos services</a
+          >
+        </p>
+      </div>
+    </ng-template>
   </div>
 </div>

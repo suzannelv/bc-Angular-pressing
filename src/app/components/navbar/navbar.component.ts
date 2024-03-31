@@ -15,7 +15,6 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private tokenService: TokenService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -36,7 +35,6 @@ export class NavbarComponent implements OnInit {
   }
 
   removeUserInfo() {
-    // this.tokenService.clearToken();
     this.authService.logout();
   }
 }
