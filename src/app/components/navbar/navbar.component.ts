@@ -20,10 +20,15 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe((status) => {
-      this.isLoggedIn = status;
+    this.authService.isLoggedIn$.subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+      if (loggedIn) {
+        // 如果用户已登录，那么加载对应的购物车数据
+        this.cartService.loadInitialCart();
+        this.cdr.detectChanges();
+      }
     });
-    this.updateQuantityInCart();
+
     this.cartService.cart$.subscribe((products) => {
       this.updateQuantityInCart();
       this.cdr.detectChanges();

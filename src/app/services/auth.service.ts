@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BASE_URL } from '../constants/api-constants';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { TokenService } from './token.service';
 import { TokenInterface } from '../model/token.interface';
 import { ClientInfo } from '../model/clientInfo.interface';
 import { Router } from '@angular/router';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +14,12 @@ import { Router } from '@angular/router';
 export class AuthService {
   private tokenExpirationTimer: any;
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-
+  private cartService!: CartService;
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private injector: Injector
   ) {}
 
   private hasToken(): boolean {
@@ -62,6 +64,9 @@ export class AuthService {
   logout() {
     console.log('Logging out...');
     this.tokenService.clearToken();
+    localStorage.removeItem('userId'); // 清除用户ID
+    this.cartService = this.injector.get(CartService);
+    this.cartService.clearCart();
     this.loggedIn.next(false);
     this.router.navigate(['/auth']);
     if (this.tokenExpirationTimer) {
@@ -70,15 +75,6 @@ export class AuthService {
     this.tokenExpirationTimer = null;
   }
 
-  // déclancher auto déconnection au bout d'une durée donnée
-  // autoLogout(expirationDuration: number) {
-  //   if (this.tokenExpirationTimer) {
-  //     clearTimeout(this.tokenExpirationTimer);
-  //   }
-  //   this.tokenExpirationTimer = setTimeout(() => {
-  //     this.logout();
-  //   }, expirationDuration);
-  // }
   autoLogout(expirationDuration: number) {
     const expirationDateString = localStorage.getItem('expiration');
     if (!expirationDateString) {
@@ -107,6 +103,16 @@ export class AuthService {
       }),
     };
     return this.http.get<ClientInfo>(`${BASE_URL}me`, httpOptions).pipe(
+      tap((clientInfo) => {
+        if (clientInfo.id !== null) {
+          // 确保id不是null
+          localStorage.setItem('userId', clientInfo.id.toString());
+        } else {
+          console.error('Received null ID for the client.');
+          // 可以选择在这里处理null的情况，比如清除已有的userId
+          localStorage.removeItem('userId');
+        }
+      }),
       catchError((error) => {
         console.error('Une erreur survenue:', error);
         return throwError(

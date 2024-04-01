@@ -3,7 +3,7 @@ import {
   CartProductSelectedInterface,
   CreateProductSelectedInterface,
 } from '../model/productSelected.interface';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 
 const CART_STORAGE_KEY = 'cart';
@@ -17,11 +17,24 @@ export class CartService {
   );
   cart$ = this.cart.asObservable();
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
+
+  private getCartKey(): string {
+    const userId = localStorage.getItem('userId');
+    return userId ? `${CART_STORAGE_KEY}_${userId}` : CART_STORAGE_KEY;
+  }
+
+  public loadInitialCart(): void {
+    const key = this.getCartKey();
+    const storedCart = localStorage.getItem(key);
+    const cartData = storedCart ? JSON.parse(storedCart) : [];
+    this.cart.next(cartData);
+  }
 
   addProduct(product: CreateProductSelectedInterface): void {
     // récupérer les produits dans le panier
-    let currentCart = this.getProducts();
+    // let currentCart = this.getProducts();
+    const currentCart = this.cart.value;
 
     const index = currentCart.findIndex((p) => p.uniqueId === product.uniqueId);
 
@@ -30,31 +43,34 @@ export class CartService {
     } else {
       currentCart.push(product);
     }
-    // Mise à jour les produits dans localStrage
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(currentCart));
-    // Mise à jour du BehaviorSubject pour informer les abonnés des modifications apportées au panier
-    this.cart.next(currentCart);
+
+    this.updateCart(currentCart);
+  }
+
+  updateCart(cart: CartProductSelectedInterface[]): void {
+    const key = this.getCartKey();
+    localStorage.setItem(key, JSON.stringify(cart));
+    this.cart.next(cart);
   }
 
   getProducts(): CartProductSelectedInterface[] {
-    const cartLocalStorage = localStorage.getItem(CART_STORAGE_KEY);
+    // 调用一个新的方法来获取基于当前用户的存储键
+    const cartStorageKey = this.getCartKey();
+    const cartLocalStorage = localStorage.getItem(cartStorageKey);
 
-    // Panier vide : non défini dans le localStorage
     if (cartLocalStorage === null) {
       return [];
     }
-    // console.log('Loaded cart items:', JSON.parse(cartLocalStorage));
 
     const cart = JSON.parse(cartLocalStorage) as CartProductSelectedInterface[];
-    // console.log('Loaded cart items from localStorage:', cart);
     return cart;
   }
 
   removeProduct(uniqueId: string) {
     let currentCart = this.getProducts();
     const newCart = currentCart.filter((item) => item.uniqueId !== uniqueId);
-
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+    const key = this.getCartKey();
+    localStorage.setItem(key, JSON.stringify(newCart));
     this.cart.next(newCart);
   }
 
@@ -70,12 +86,13 @@ export class CartService {
   calculateTotalPrice(items: CartProductSelectedInterface[]): number {
     let total = 0;
     items.forEach((item) => {
-      // console.log(
-      //   `服务中价格: ${item.productName}, Quantity: ${item.quantity}, Price: ${item.price}`
-      // );
       total += item.price * item.quantity;
     });
-    // console.log('Calculated cart total:', total);
     return parseFloat(total.toFixed(2));
+  }
+  clearCart() {
+    const key = this.getCartKey();
+    localStorage.removeItem(key);
+    this.cart.next([]);
   }
 }

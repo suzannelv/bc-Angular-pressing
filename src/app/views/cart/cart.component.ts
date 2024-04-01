@@ -10,8 +10,6 @@ import { Route, Router } from '@angular/router';
 import { ClientInfo } from '../../model/clientInfo.interface';
 import { OrderDetailService } from '../../services/order-detail.service';
 import { OrderDetailInterface } from '../../model/orderDetail.interface';
-import { ProductSelectedService } from '../../services/product-selected.service';
-import { materialize } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -38,9 +36,7 @@ export class CartComponent implements OnInit {
     private cartService: CartService,
     private paymentService: PaymentService,
     private authService: AuthService,
-    private router: Router,
     private orderDetailService: OrderDetailService,
-    private productSelectedService: ProductSelectedService,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -56,27 +52,20 @@ export class CartComponent implements OnInit {
     this.loadInitialCart();
     this.getPayments();
     this.getClientInfo();
-    // const allProductsSelecte = this.items.map((item) => ({
-    //   product: item.product,
-    //   material: item.material,
-    //   totalPrice: item.price,
-    //   quantity: item.quantity,
-    // }));
-    // console.log('allProductsSelected:', allProductsSelecte);
   }
 
   getClientInfo() {
     if (this.authService.isLoggedIn()) {
-      this.isLoadingClientInfo = true; // Début du chargement
+      this.isLoadingClientInfo = true;
       this.authService.getCurrentUser().subscribe({
         next: (data) => {
           this.clientInfo = data;
           console.log('购物车中客人信息：', this.clientInfo);
-          this.isLoadingClientInfo = false; // Fin du chargement
+          this.isLoadingClientInfo = false;
         },
         error: (error) => {
           console.log(error);
-          this.isLoadingClientInfo = false; // Assurez-vous de gérer le chargement en cas d'erreur également
+          this.isLoadingClientInfo = false;
         },
       });
     } else {
