@@ -5,3 +5,8 @@
 .btn-style:hover {
   background-color: var(--secondary-color);
 }
+
+.reset-size {
+  width: 100%;
+  height: 600px;
+}
