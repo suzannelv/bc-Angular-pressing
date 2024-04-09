@@ -6,10 +6,10 @@ import { PaymentInterface } from '../../model/payment.interface';
 import { ClickCollectFormComponent } from '../../components/click-collect-form/click-collect-form.component';
 import { DeliveryFormComponent } from '../../components/delivery-form/delivery-form.component';
 import { AuthService } from '../../services/auth.service';
-import { Route, Router } from '@angular/router';
 import { ClientInfo } from '../../model/clientInfo.interface';
 import { OrderDetailService } from '../../services/order-detail.service';
 import { OrderDetailInterface } from '../../model/orderDetail.interface';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-cart',
@@ -37,18 +37,17 @@ export class CartComponent implements OnInit {
     private paymentService: PaymentService,
     private authService: AuthService,
     private orderDetailService: OrderDetailService,
+    private notificationService: NotificationService,
     private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.cartService.cart$.subscribe((newCart) => {
-      // console.log('购物车已更新', newCart);
       this.items = newCart;
-      console.log(this.items);
       this.totalPrice = this.cartService.calculateTotalPrice(newCart);
       this.totalQuantity = this.cartService.getTotalQuantity();
     });
-    // 初始加载购物车
+    // initialiser toutes les données dans le panier
     this.loadInitialCart();
     this.getPayments();
     this.getClientInfo();
@@ -60,23 +59,22 @@ export class CartComponent implements OnInit {
       this.authService.getCurrentUser().subscribe({
         next: (data) => {
           this.clientInfo = data;
-          console.log('购物车中客人信息：', this.clientInfo);
           this.isLoadingClientInfo = false;
         },
-        error: (error) => {
-          console.log(error);
+        error: () => {
+          this.notificationService.showError(
+            'Une erreur survenue lors de téléchargement les données du client.'
+          );
           this.isLoadingClientInfo = false;
         },
       });
     } else {
-      console.log("Utilisateur n'est pas connecté");
       this.isLoadingClientInfo = false;
     }
   }
 
   loadInitialCart() {
     this.items = this.cartService.getProducts();
-    console.log(this.items);
     this.totalPrice = this.cartService.calculateTotalPrice(this.items);
     this.totalQuantity = this.cartService.getTotalQuantity();
   }
@@ -85,10 +83,10 @@ export class CartComponent implements OnInit {
     this.items = this.cartService.getProducts();
     this.totalPrice = this.cartService.calculateTotalPrice(this.items);
   }
+
   getPayments() {
     this.paymentService.getPaymentMethods().subscribe((res) => {
       this.paymentsOptions = res['hydra:member'];
-      // console.log(this.paymentsOptions);
     });
   }
 
@@ -164,11 +162,12 @@ export class CartComponent implements OnInit {
     }
 
     if (this.isLoadingClientInfo || !this.clientInfo) {
-      console.error(
+      this.notificationService.showError(
         'Les informations du client sont encore en cours de chargement ou manquantes.'
       );
       return;
     }
+
     // Convertissez les chaînes de caractères en objets Date avec une valeur par défaut si undefined
     const depositDateString: string =
       this.deliveryFormComponent?.deliveryInfo.depositDate ?? '';
@@ -185,7 +184,7 @@ export class CartComponent implements OnInit {
 
     // Vérifiez que les conversions sont valides (non NaN)
     if (isNaN(depositDate.getTime()) || isNaN(retrieveDate.getTime())) {
-      console.error('Invalid date');
+      this.notificationService.showError("La date saisie n'est pas valide.");
       return;
     }
 
@@ -195,7 +194,6 @@ export class CartComponent implements OnInit {
       totalPrice: item.price,
       quantity: item.quantity,
     }));
-    console.log('allProductsSelected:', allProductsSelecte);
 
     let ClientId = '/api/clients/' + this.clientInfo?.id;
     const orderDetail: OrderDetailInterface = {
@@ -203,20 +201,18 @@ export class CartComponent implements OnInit {
       retrieveDate: retrieveDate,
       payment: this.selectedPaymentMethod,
       client: ClientId,
-      emp: '/api/employees/652',
-      orderStatus: '/api/order_statuses/162',
+      emp: '/api/employees/677',
+      orderStatus: '/api/order_statuses/169',
       delivery: this.isDelivery,
       productSelected: allProductsSelecte,
     };
-    console.log(orderDetail);
 
     this.orderDetailService.createOrder(orderDetail).subscribe({
-      next: (response) => {
-        console.log('order created successfully', response);
-        // this.router.navigate(['/order-success']);
+      next: () => {
+        this.notificationService.showError('Merci pour votre commande.');
       },
-      error: (error) => {
-        console.error('Failed to create order', error);
+      error: () => {
+        this.notificationService.showError('Echouer à créer la commande.');
       },
     });
   }

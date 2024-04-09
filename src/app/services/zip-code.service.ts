@@ -12,10 +12,12 @@ export class ZipCodeService {
 
   getZipCodeAll(): Observable<ZipCodeResponse> {
     return this.http.get<ZipCodeResponse>(`${BASE_URL}zip_codes`).pipe(
-      catchError((error) => {
-        console.error('An error occurred:', error);
+      catchError(() => {
         return throwError(
-          () => new Error('An error occurred while fetching the zipcode.')
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des codes postaux.'
+            )
         );
       })
     );

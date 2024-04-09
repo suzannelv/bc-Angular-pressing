@@ -23,7 +23,6 @@ export class NavbarComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
       if (loggedIn) {
-        // 如果用户已登录，那么加载对应的购物车数据
         this.cartService.loadInitialCart();
         this.cdr.detectChanges();
       }

@@ -6,7 +6,7 @@ import { ApiService } from './services/api.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Mr.U-Smiley';
 
   token: string | any = '';
@@ -15,9 +15,5 @@ export class AppComponent implements OnInit {
 
   sendRequest() {
     this.apiService.createCorsToken(this.token);
-  }
-
-  ngOnInit(): void {
-    // 处理token逻辑，如果token 存在，存储当地，如果不存在，什么都不做
   }
 }

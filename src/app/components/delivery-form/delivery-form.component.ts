@@ -77,7 +77,6 @@ export class DeliveryFormComponent implements OnInit {
       this.isDeliveryDateValid() &&
       this.isDepositDateValid()
     ) {
-      console.log('delivery value:', this.myForm.value);
       return this.myForm.value;
     } else {
       return null;

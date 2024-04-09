@@ -3,17 +3,11 @@ import { ProductInterface } from '../../../model/product.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { ServiceOptionsService } from '../../../services/service-options.service';
-import {
-  OptionsResponse,
-  ServiceOptionsInterface,
-} from '../../../model/serviceOptions.interface';
+import { ServiceOptionsInterface } from '../../../model/serviceOptions.interface';
 import { MaterialService } from '../../../services/material.service';
 import { MaterialsInterface } from '../../../model/materials.interface';
 import { ProductSelectedService } from '../../../services/product-selected.service';
-import {
-  CreateProductSelectedInterface,
-  ProductSelectedInterface,
-} from '../../../model/productSelected.interface';
+import { CreateProductSelectedInterface } from '../../../model/productSelected.interface';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
@@ -22,7 +16,6 @@ import { CartService } from '../../../services/cart.service';
   styleUrl: './product-detail.component.css',
 })
 export class ProductDetailComponent implements OnInit {
-  // id: string | null = null;
   productSelected: ProductInterface | undefined;
   options: ServiceOptionsInterface[] | undefined;
   materials: MaterialsInterface[] | undefined;
@@ -52,7 +45,6 @@ export class ProductDetailComponent implements OnInit {
         .getProductById(Number(productId))
         .subscribe((product) => {
           this.productSelected = product;
-          console.log('Produit sélectionné: ', this.productSelected);
         });
       this.getOptions();
       this.getMaterials();
@@ -65,7 +57,6 @@ export class ProductDetailComponent implements OnInit {
       .getServiceOptions()
       .subscribe((res: ServiceOptionsInterface[]) => {
         this.options = res;
-        console.log('options :', this.options);
         this.options?.forEach((option) => {
           this.selectedOptions[option['@id']] = false;
         });
@@ -85,13 +76,12 @@ export class ProductDetailComponent implements OnInit {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedMaterial = selectElement.value;
 
-    // 找到选中材质的系数并更新 selectedMaterialCoeff
+    // mise à jour le coefficent sur la matériel choisie
     const selectedMaterialObj = this.materials?.find(
       (material) => material['@id'] === this.selectedMaterial
     );
     if (selectedMaterialObj) {
       this.selectedMaterialCoeff = selectedMaterialObj.coefficentPrice;
-      console.log('材料系数：', this.selectedMaterialCoeff);
     }
   }
 
@@ -101,13 +91,13 @@ export class ProductDetailComponent implements OnInit {
       data.filter(
         (productSelected) => productId === productSelected.product.id
       );
-      console.log(data);
     });
   }
 
   incrementQuantity() {
     this.quantity++;
   }
+
   decrementQuantity() {
     if (this.quantity > 0) {
       this.quantity--;
@@ -116,7 +106,6 @@ export class ProductDetailComponent implements OnInit {
 
   handleOptionChange(e: Event): void {
     const checkbox = e.target as HTMLInputElement;
-
     const optionId = checkbox.value;
     this.selectedOptions[optionId] = checkbox.checked;
     if (checkbox.checked) {
@@ -126,12 +115,8 @@ export class ProductDetailComponent implements OnInit {
           option.coefficentPrice;
       }
     } else {
-      // 当选项被取消选中时，从存储中移除该选项的系数
       delete this.selectedServiceOptionsCoefficients[optionId];
     }
-
-    console.log(`Option ${optionId} changed: ${checkbox.checked}`);
-    console.log('服务选项系数:', this.selectedServiceOptionsCoefficients);
   }
 
   // calculer le prix total d'un produit
@@ -176,7 +161,6 @@ export class ProductDetailComponent implements OnInit {
       price: this.calculateItemTotalPrice(),
       contentUrl: this.productSelected!.contentUrl,
     };
-    console.log('Adding product to cart:', productSelect);
 
     this.cartService.addProduct(productSelect);
   }

@@ -15,7 +15,6 @@ export class TokenService {
 
   isLogged(): boolean {
     const token = localStorage.getItem('token');
-    console.log(token);
     return !!token;
   }
 
@@ -24,9 +23,7 @@ export class TokenService {
   }
 
   clearToken(): void {
-    console.log('Clearing token...');
     this.token = null;
     localStorage.removeItem('token');
-    console.log('Token after clear:', localStorage.getItem('token'));
   }
 }

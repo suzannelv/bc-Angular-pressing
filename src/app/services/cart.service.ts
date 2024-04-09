@@ -32,10 +32,7 @@ export class CartService {
   }
 
   addProduct(product: CreateProductSelectedInterface): void {
-    // récupérer les produits dans le panier
-    // let currentCart = this.getProducts();
     const currentCart = this.cart.value;
-
     const index = currentCart.findIndex((p) => p.uniqueId === product.uniqueId);
 
     if (index !== -1) {

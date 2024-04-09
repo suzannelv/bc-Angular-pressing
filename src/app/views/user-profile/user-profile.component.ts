@@ -4,6 +4,7 @@ import { ClientInfo } from '../../model/clientInfo.interface';
 import { ClientService } from '../../services/client.service';
 import { NgForm } from '@angular/forms';
 import { OrderDetailInterface } from '../../model/orderDetail.interface';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -16,7 +17,8 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -28,15 +30,14 @@ export class UserProfileComponent implements OnInit {
       this.authService.getCurrentUser().subscribe({
         next: (data) => {
           this.clientData = data;
-          console.log('client info in account:', this.clientData);
           this.loadOrderdetails();
         },
-        error: (error) => {
-          console.error(error);
+        error: () => {
+          this.notificationService.showError(
+            "Une erreur survenue lors que le téléchargement des données d'un utilisateur "
+          );
         },
       });
-    } else {
-      console.log("Utilisateur n'est pas connecté");
     }
   }
 
@@ -46,14 +47,16 @@ export class UserProfileComponent implements OnInit {
       this.clientService.getOrderListByClientId(clientId).subscribe({
         next: (data) => {
           this.orderDetails = data['hydra:member'];
-          console.log('订单详情:', this.orderDetails);
         },
-        error: (error) => {
-          console.error('Error loading order details:', error);
+        error: () => {
+          this.notificationService.showError(
+            'Une erreur survenue lors que le téléchargement des données de la commande.'
+          );
         },
       });
     }
   }
+
   onSubmit(data: NgForm) {
     if (data.valid) {
       const newAddress = data.value.adress;
@@ -62,11 +65,11 @@ export class UserProfileComponent implements OnInit {
         this.clientService.updateClientAddress(clientId, newAddress).subscribe({
           next: (updatedClient) => {
             this.clientData!.adress = updatedClient.adress;
-            console.log('Address updated successfully');
-            // Do something to reflect changes in the UI, maybe close the modal
           },
-          error: (error) => {
-            console.error(error);
+          error: () => {
+            this.notificationService.showError(
+              "Une erreur survenue au moment de modifier l'adresse."
+            );
           },
         });
       }

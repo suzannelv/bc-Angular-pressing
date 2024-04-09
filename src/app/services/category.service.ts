@@ -15,10 +15,12 @@ export class CategoryService {
 
   getParentCategories(): Observable<CategoryResponse> {
     return this.http.get<CategoryResponse>(`${BASE_URL}categories`).pipe(
-      catchError((error) => {
-        console.error('An error occurred:', error);
+      catchError(() => {
         return throwError(
-          () => new Error('An error occurred while fetching the materials.')
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des catégories.'
+            )
         );
       })
     );
@@ -26,16 +28,19 @@ export class CategoryService {
 
   getChildCategory(childId: number): Observable<CategoryInterface> {
     if (childId == null || childId <= 0) {
-      console.error(`Invalid childId: ${childId}`);
-      return throwError(() => new Error('Invalid childId provided'));
+      return throwError(
+        () => new Error("ID de sous-catégorie n'est pas pas fournie.")
+      );
     }
     return this.http
       .get<CategoryInterface>(`${BASE_URL}categories/${childId}`)
       .pipe(
-        catchError((error) => {
-          console.error('An error occurred:', error);
+        catchError(() => {
           return throwError(
-            () => new Error('An error occurred while fetching the materials.')
+            () =>
+              new Error(
+                'Une erreur survenue lors de la récupération des sous-catégories.'
+              )
           );
         })
       );

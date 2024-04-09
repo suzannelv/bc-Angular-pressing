@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { ProductInterface } from '../../model/product.interface';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-product',
@@ -18,14 +19,16 @@ export class ProductComponent implements OnChanges {
   products: ProductInterface[] = [];
   isLoading = true;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const categoryIdChange = changes['categoryId'];
     if (categoryIdChange && categoryIdChange.currentValue !== undefined) {
       this.loadProductsByCategory(categoryIdChange.currentValue);
     }
-    console.log('categoryId dans product:', this.categoryId);
   }
 
   loadProductsByCategory(categoryId: number | undefined): void {
@@ -42,11 +45,12 @@ export class ProductComponent implements OnChanges {
         } else {
           this.products = [];
         }
-        console.log('Filtered products:', this.products);
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error loading products:', error);
+      error: () => {
+        this.notificationService.showError(
+          'Une erreur est survenue lors de la récupération de la liste des produits.'
+        );
         this.products = [];
       },
       complete: () => {
@@ -56,6 +60,6 @@ export class ProductComponent implements OnChanges {
   }
 
   trackByProductId(index: number, product: ProductInterface): number {
-    return product.id; // 假设每个产品都有唯一的 ID
+    return product.id;
   }
 }

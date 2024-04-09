@@ -17,16 +17,20 @@ export class ServiceOptionsService {
 
   getServiceOptions(): Observable<ServiceOptionsInterface[]> {
     if (this.serviceOptionsCache) {
-      // 如果已经有缓存的服务选项，直接返回这些选项
+      // s'il y a déja des options de services, retourne ces services options
       return of(this.serviceOptionsCache);
     }
-    // 从服务器获取服务选项，并缓存结果
+    // récupérer les options depuis le serveur
     return this.http.get<OptionsResponse>(`${BASE_URL}service_options`).pipe(
       tap((response) => (this.serviceOptionsCache = response['hydra:member'])),
       map((response) => response['hydra:member']),
-      catchError((error) => {
-        console.error('An error occurred:', error);
-        return throwError(() => new Error('Failed to fetch service options.'));
+      catchError(() => {
+        return throwError(
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des données des options de service.'
+            )
+        );
       })
     );
   }
@@ -34,30 +38,15 @@ export class ServiceOptionsService {
   getServiceOptionById(
     id: string
   ): Observable<ServiceOptionsInterface | undefined> {
-    // 如果服务选项已经被缓存，直接从缓存中查找
     if (this.serviceOptionsCache) {
       const option = this.serviceOptionsCache.find(
         (option) => option['@id'] === id
       );
       return of(option);
     }
-    // 如果没有缓存，先获取服务选项再查找
+
     return this.getServiceOptions().pipe(
       map((options) => options.find((option) => option['@id'] === id))
     );
   }
-
-  // getServiceOptions(): Observable<OptionsResponse> {
-  //   return this.http.get<OptionsResponse>(`${BASE_URL}service_options`).pipe(
-  //     catchError((error) => {
-  //       console.error('Une erreur est survenue:', error);
-  //       return throwError(
-  //         () =>
-  //           new Error(
-  //             'Une erreur est survenue lorsque récupérer service-options api.'
-  //           )
-  //       );
-  //     })
-  //   );
-  // }
 }

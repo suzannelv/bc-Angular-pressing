@@ -18,12 +18,11 @@ export class ProductSelectedService {
     return this.http
       .get<ProductSelectedResponse>(`${BASE_URL}product_selecteds`)
       .pipe(
-        catchError((error) => {
-          console.error('An error occurred:', error);
+        catchError(() => {
           return throwError(
             () =>
               new Error(
-                'An error occurred while fetching the product selected.'
+                'Une erreur survenue lors de la récupération des produits sélectionnés.'
               )
           );
         })
@@ -39,13 +38,9 @@ export class ProductSelectedService {
         productSelectedData
       )
       .pipe(
-        catchError((error) => {
-          console.error(
-            'An error occurred while creating product selected:',
-            error
-          );
+        catchError(() => {
           return throwError(
-            () => new Error('Failed to create product selected.')
+            () => new Error('Echouer de créer le produit sélectionné.')
           );
         })
       );

@@ -5,6 +5,7 @@ import { ZipCodeInterface } from '../../model/zipCode.interface';
 import { ZipCodeService } from '../../services/zip-code.service';
 import { zip } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-registration',
@@ -21,6 +22,7 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private registerService: RegisterService,
     private zipcodeService: ZipCodeService,
+    private notificationService: NotificationService,
     private router: Router
   ) {}
 
@@ -29,23 +31,21 @@ export class RegistrationComponent implements OnInit {
   }
 
   onCityChange(selectedCity: string) {
-    // filter city and its zipcode
+    // Filter la ville et son code postal
     this.selectedCityZipCodes = this.zipCodeList?.filter(
       (zipCode) => zipCode.city === selectedCity
     );
-    // set default zipcode
+    // Définir le code postal par défaut
     this.selectedZipCode = this.selectedCityZipCodes[0]['@id'];
-    console.log(this.selectedZipCode);
   }
 
   getZipCodes() {
     this.zipcodeService.getZipCodeAll().subscribe((res) => {
       this.zipCodeList = res['hydra:member'];
-      console.log(this.zipCodeList);
       this.uniqueCities = [
         ...new Set(this.zipCodeList.map((zipCode) => zipCode.city)),
       ];
-      // set default city
+      // définir la ville par défaut
       if (this.uniqueCities.length > 0) {
         this.selectedCity = this.uniqueCities[0];
         this.onCityChange(this.selectedCity);
@@ -57,7 +57,6 @@ export class RegistrationComponent implements OnInit {
     const data = form.value;
     let zipCodeIRI = this.selectedZipCode;
     if (!zipCodeIRI?.startsWith('/api/zip_codes/')) {
-      console.error('Selected ZipCode is not a valid IRI');
       return;
     }
     const dataToSubmit = {
@@ -73,11 +72,13 @@ export class RegistrationComponent implements OnInit {
 
     this.registerService.register(dataToSubmit).subscribe({
       next: (response: any) => {
-        console.log('Success:', response);
         const username = response.firstname;
         this.router.navigate(['/welcome', username]);
       },
-      error: (error) => console.error('Registration error:', error),
+      error: () =>
+        this.notificationService.showError(
+          "Une erreur s'est produite lors de l'inscription. Veuillez réessayer plus tard."
+        ),
     });
   }
 }

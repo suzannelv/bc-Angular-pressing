@@ -28,9 +28,4 @@ export class WelcomeComponent implements OnInit {
   navigateHome() {
     this.router.navigate(['/']);
   }
-
-  // goToHomePage() {
-  //   this.router.navigate(['/']);
-  //   console.log('lick');
-  // }
 }

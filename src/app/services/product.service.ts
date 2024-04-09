@@ -6,9 +6,7 @@ import {
   catchError,
   expand,
   map,
-  of,
   reduce,
-  tap,
   throwError,
 } from 'rxjs';
 import { ProductInterface, ProductResponse } from '../model/product.interface';
@@ -29,16 +27,18 @@ export class ProductService {
           ? this.http.get<ProductResponse>(res['hydra:view']['hydra:next'])
           : EMPTY;
       }),
-      // tap((data) => console.log('Current page data:', data)),
+
       map((res) => (res ? res['hydra:member'] : [])),
       reduce<ProductInterface[], ProductInterface[]>(
         (acc, cur) => [...acc, ...cur],
         []
       ),
-      catchError((error) => {
-        console.error('An error occurred:', error);
+      catchError(() => {
         return throwError(
-          () => new Error('An error occurred while fetching products')
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des produits.'
+            )
         );
       })
     );
@@ -48,12 +48,11 @@ export class ProductService {
     return this.http
       .get<ProductInterface>(`${BASE_URL}products/${productId}`)
       .pipe(
-        catchError((error) => {
-          console.error('An error occurred:', error);
+        catchError(() => {
           return throwError(
             () =>
               new Error(
-                `An error occurred while fetching the product with ID ${productId}`
+                `Une erreur survenue lors de la récupération le produit par ID ${productId}`
               )
           );
         })

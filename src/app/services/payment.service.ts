@@ -12,8 +12,7 @@ export class PaymentService {
 
   getPaymentMethods(): Observable<PaymentResponse> {
     return this.http.get<PaymentResponse>(`${BASE_URL}payments`).pipe(
-      catchError((error) => {
-        console.error('An error occurred:', error);
+      catchError(() => {
         return throwError(
           () => new Error('An error occurred while fetching the materials.')
         );

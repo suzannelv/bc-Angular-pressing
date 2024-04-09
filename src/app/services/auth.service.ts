@@ -41,9 +41,8 @@ export class AuthService {
           this.storeToken(response.token);
           this.loggedIn.next(true);
         }),
-        catchError((error) => {
-          console.error('Login failed:', error);
-          return throwError(() => new Error('Login failed'));
+        catchError(() => {
+          return throwError(() => new Error('erreur de connextion'));
         })
       );
   }
@@ -62,9 +61,8 @@ export class AuthService {
 
   // se déconnecter et arrêter counter
   logout() {
-    console.log('Logging out...');
     this.tokenService.clearToken();
-    localStorage.removeItem('userId'); // 清除用户ID
+    localStorage.removeItem('userId');
     this.cartService = this.injector.get(CartService);
     this.cartService.clearCart();
     this.loggedIn.next(false);
@@ -105,16 +103,12 @@ export class AuthService {
     return this.http.get<ClientInfo>(`${BASE_URL}me`, httpOptions).pipe(
       tap((clientInfo) => {
         if (clientInfo.id !== null) {
-          // 确保id不是null
           localStorage.setItem('userId', clientInfo.id.toString());
         } else {
-          console.error('Received null ID for the client.');
-          // 可以选择在这里处理null的情况，比如清除已有的userId
           localStorage.removeItem('userId');
         }
       }),
-      catchError((error) => {
-        console.error('Une erreur survenue:', error);
+      catchError(() => {
         return throwError(
           () =>
             new Error('Une erreur est survenue lors de récupérer client info.')

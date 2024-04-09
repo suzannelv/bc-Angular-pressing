@@ -11,7 +11,6 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     });
-
     return { headers: headers };
   }
 }
