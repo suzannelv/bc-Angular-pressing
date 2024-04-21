@@ -12,10 +12,12 @@ export class MaterialService {
 
   getMaterialOptions(): Observable<MaterialResponse> {
     return this.http.get<MaterialResponse>(`${BASE_URL}materials`).pipe(
-      catchError((error) => {
-        console.error('An error occurred:', error);
+      catchError(() => {
         return throwError(
-          () => new Error('An error occurred while fetching the materials.')
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des matériels.'
+            )
         );
       })
     );

@@ -53,6 +53,7 @@ export class CartComponent implements OnInit {
     this.getClientInfo();
   }
 
+  // préremplir les infos dans le formulaire de livraison de l'utilisateur courant s'il est connecté
   getClientInfo() {
     if (this.authService.isLoggedIn()) {
       this.isLoadingClientInfo = true;
@@ -102,24 +103,26 @@ export class CartComponent implements OnInit {
     this.totalQuantity = this.cartService.getTotalQuantity();
   }
 
-  decrement(item: CartProductSelectedInterface) {
+  // diminuer la quantité des produits
+  decrementInCart(item: CartProductSelectedInterface) {
     if (item.quantity > 1) {
-      item.quantity--;
-      this.updateCart();
+      this.cartService.decrement(item);
     }
   }
-
-  increment(item: CartProductSelectedInterface) {
-    item.quantity++;
-    this.updateCart();
+  // augmenter la quantité des produits
+  incrementInCart(item: CartProductSelectedInterface) {
+    this.cartService.increment(item);
   }
 
+  // mise à jours les infos dans le panier: quantité, prix total
   updateCart() {
     this.updateTotalQuantity();
     this.totalPrice = this.cartService.calculateTotalPrice(this.items);
     this.cartService.getProducts();
+    this.cdRef.detectChanges();
   }
 
+  // supprimer les produits
   removeItem(uniqueId: string) {
     this.cartService.removeProduct(uniqueId);
     this.getProducts();

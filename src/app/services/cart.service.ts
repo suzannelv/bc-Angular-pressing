@@ -4,7 +4,6 @@ import {
   CreateProductSelectedInterface,
 } from '../model/productSelected.interface';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from './auth.service';
 
 const CART_STORAGE_KEY = 'cart';
 
@@ -17,7 +16,7 @@ export class CartService {
   );
   cart$ = this.cart.asObservable();
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   private getCartKey(): string {
     const userId = localStorage.getItem('userId');
@@ -50,8 +49,11 @@ export class CartService {
     this.cart.next(cart);
   }
 
+  /**
+   * Récupère les produits du panier stockés dans localStorage pour l'utilisateur actuel.
+   * @returns Un tableau de produits sélectionnés dans le panier. Retourne un tableau vide si aucun produit n'est stocké.
+   */
   getProducts(): CartProductSelectedInterface[] {
-    // 调用一个新的方法来获取基于当前用户的存储键
     const cartStorageKey = this.getCartKey();
     const cartLocalStorage = localStorage.getItem(cartStorageKey);
 
@@ -63,6 +65,10 @@ export class CartService {
     return cart;
   }
 
+  /**
+   * Supprime un produit du panier en fonction de son identifiant unique.
+   * @param uniqueId L'identifiant unique du produit à supprimer.
+   */
   removeProduct(uniqueId: string) {
     let currentCart = this.getProducts();
     const newCart = currentCart.filter((item) => item.uniqueId !== uniqueId);
@@ -91,5 +97,25 @@ export class CartService {
     const key = this.getCartKey();
     localStorage.removeItem(key);
     this.cart.next([]);
+  }
+
+  increment(item: CartProductSelectedInterface): void {
+    let currentCart = this.getProducts();
+    const index = currentCart.findIndex((p) => p.uniqueId === item.uniqueId);
+    if (index !== -1) {
+      currentCart[index].quantity++;
+      // mise à jour la quantité des produis dans le panier
+      this.updateCart(currentCart);
+    }
+  }
+
+  decrement(item: CartProductSelectedInterface): void {
+    let currentCart = this.getProducts();
+    const index = currentCart.findIndex((p) => p.uniqueId === item.uniqueId);
+    if (index !== -1 && currentCart[index].quantity > 1) {
+      currentCart[index].quantity--;
+      // mise à jour la quantité des produis dans le panier
+      this.updateCart(currentCart);
+    }
   }
 }

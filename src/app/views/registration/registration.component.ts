@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { RegisterService } from '../../services/register.service';
 import { ZipCodeInterface } from '../../model/zipCode.interface';
 import { ZipCodeService } from '../../services/zip-code.service';
-import { zip } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 
@@ -67,6 +66,7 @@ export class RegistrationComponent implements OnInit {
     if (data.birthday) {
       dataToSubmit.birthday = new Date(data.birthday).toISOString();
     } else {
+      // pour garantir que l'objet envoyé au serveur est propre et conforme aux attentes de l'API
       delete dataToSubmit.birthday;
     }
 

@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Souscription à l'observable indiquant l'état de connexion.
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
       if (loggedIn) {
@@ -27,9 +28,10 @@ export class NavbarComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
-
-    this.cartService.cart$.subscribe((products) => {
+    // Souscription à l'observable du panier pour mettre à jour la quantité d'articles.
+    this.cartService.cart$.subscribe(() => {
       this.updateQuantityInCart();
+      // Déclenchement manuel de la détection de changements.
       this.cdr.detectChanges();
     });
   }
@@ -37,7 +39,7 @@ export class NavbarComponent implements OnInit {
   private updateQuantityInCart(): void {
     this.quantityInCart = this.cartService.getTotalQuantity();
   }
-
+  // Déconnexion de l'utilisateur et suppression des informations utilisateur.
   removeUserInfo() {
     this.authService.logout();
   }

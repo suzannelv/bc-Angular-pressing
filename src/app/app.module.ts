@@ -33,6 +33,7 @@ import { ClickCollectFormComponent } from './components/click-collect-form/click
 import { DeliveryFormComponent } from './components/delivery-form/delivery-form.component';
 import { UserProfileComponent } from './views/user-profile/user-profile.component';
 import { ContactComponent } from './views/contact/contact.component';
+import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { ContactComponent } from './views/contact/contact.component';
     DeliveryFormComponent,
     UserProfileComponent,
     ContactComponent,
+    BackToTopComponent,
   ],
   imports: [
     BrowserModule,

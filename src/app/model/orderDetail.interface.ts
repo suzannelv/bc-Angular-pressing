@@ -1,8 +1,3 @@
-import { OrderStatusInterface } from './orderStatus.interface';
-import { PaymentInterface } from './payment.interface';
-import { ProductSelectedInterface } from './productSelected.interface';
-import { UserInterface } from './user.interface';
-
 export interface OrderDetailInterface {
   depositDate: Date;
   retrieveDate: Date;

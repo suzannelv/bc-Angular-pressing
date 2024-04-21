@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   CreateProductSelectedInterface,
-  ProductSelectedInterface,
   ProductSelectedResponse,
 } from '../model/productSelected.interface';
 import { BASE_URL } from '../constants/api-constants';

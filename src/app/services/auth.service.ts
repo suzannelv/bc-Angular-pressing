@@ -15,6 +15,7 @@ export class AuthService {
   private tokenExpirationTimer: any;
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   private cartService!: CartService;
+
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
@@ -23,6 +24,7 @@ export class AuthService {
   ) {}
 
   private hasToken(): boolean {
+    // Convertit la valeur récupérée en un booléen vrai ou faux
     return !!localStorage.getItem('token');
   }
 
@@ -49,9 +51,10 @@ export class AuthService {
 
   storeToken(token: string): void {
     this.tokenService.setToken(token);
-    const expirationDate = new Date(new Date().getTime() + 3600000);
+    const expirationDuration = 3600000;
+    const expirationDate = new Date(new Date().getTime() + expirationDuration);
     localStorage.setItem('expiration', expirationDate.toISOString());
-    this.autoLogout(3600000);
+    this.autoLogout(expirationDuration);
   }
 
   // vérifier si l'utilisateur se connecter à travers l'existance de token
@@ -73,24 +76,17 @@ export class AuthService {
     this.tokenExpirationTimer = null;
   }
 
+  /**
+   * Configure automatiquement la déconnexion de l'utilisateur après un délai spécifié.
+   * @param expirationDuration Le délai en millisecondes après lequel l'utilisateur sera déconnecté automatiquement.
+   */
   autoLogout(expirationDuration: number) {
-    const expirationDateString = localStorage.getItem('expiration');
-    if (!expirationDateString) {
-      return;
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
     }
-    const expirationDate = new Date(expirationDateString);
-    const now = new Date();
-    const timeToLogout = expirationDate.getTime() - now.getTime();
-    if (timeToLogout <= 0) {
+    this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
-    } else {
-      if (this.tokenExpirationTimer) {
-        clearTimeout(this.tokenExpirationTimer);
-      }
-      this.tokenExpirationTimer = setTimeout(() => {
-        this.logout();
-      }, timeToLogout);
-    }
+    }, expirationDuration);
   }
 
   // si l'utilisateur est connecter, récupérer ses infos
@@ -111,7 +107,9 @@ export class AuthService {
       catchError(() => {
         return throwError(
           () =>
-            new Error('Une erreur est survenue lors de récupérer client info.')
+            new Error(
+              'Une erreur est survenue lors de récupérer les information du client courant.'
+            )
         );
       })
     );

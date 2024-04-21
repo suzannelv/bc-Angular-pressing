@@ -6,7 +6,6 @@ import {
   orderDetailResponse,
 } from '../model/orderDetail.interface';
 import { BASE_URL } from '../constants/api-constants';
-import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +30,7 @@ export class OrderDetailService {
       .post<OrderDetailInterface>(`${BASE_URL}order_details`, orderDetail)
       .pipe(
         catchError(() => {
-          return throwError(() => new Error('Failed to create order.'));
+          return throwError(() => new Error('Echouer de créer la commande.'));
         })
       );
   }

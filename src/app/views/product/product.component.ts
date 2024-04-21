@@ -32,6 +32,8 @@ export class ProductComponent implements OnChanges {
   }
 
   loadProductsByCategory(categoryId: number | undefined): void {
+    if (!categoryId) return;
+
     this.isLoading = true;
     this.productService.getProductAll().subscribe({
       next: (products) => {

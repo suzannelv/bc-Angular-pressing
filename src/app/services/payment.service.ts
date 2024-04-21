@@ -14,7 +14,10 @@ export class PaymentService {
     return this.http.get<PaymentResponse>(`${BASE_URL}payments`).pipe(
       catchError(() => {
         return throwError(
-          () => new Error('An error occurred while fetching the materials.')
+          () =>
+            new Error(
+              'Une erreur survenue lors de la récupération des moyens de paiement.'
+            )
         );
       })
     );

@@ -30,6 +30,7 @@ export class UserProfileComponent implements OnInit {
       this.authService.getCurrentUser().subscribe({
         next: (data) => {
           this.clientData = data;
+          console.log(this.clientData);
           this.loadOrderdetails();
         },
         error: () => {

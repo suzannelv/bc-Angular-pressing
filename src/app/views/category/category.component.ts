@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
-import {
-  CategoryInterface,
-  CategoryResponse,
-} from '../../model/category.interface';
+import { CategoryInterface } from '../../model/category.interface';
 import { firstValueFrom } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
 

@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { UserInterface } from '../model/user.interface';
 import { BASE_URL } from '../constants/api-constants';
-import {
-  OrderDetailInterface,
-  orderDetailResponse,
-} from '../model/orderDetail.interface';
+import { orderDetailResponse } from '../model/orderDetail.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,12 +24,11 @@ export class ClientService {
         headers: headers,
       })
       .pipe(
-        catchError((error) => {
-          console.error('An error occurred:', error);
+        catchError(() => {
           return throwError(
             () =>
               new Error(
-                `An error occurred while update address with ID ${clientId}`
+                `Une erreur survenue lors de la mise à jour de l'adresse de client ${clientId}`
               )
           );
         })
@@ -45,9 +41,13 @@ export class ClientService {
         `${BASE_URL}order_details?client=${clientId}&order_details[createdAt]=desc`
       )
       .pipe(
-        catchError((error) => {
-          console.error('An error occurred fetching order details:', error);
-          return throwError(() => new Error('Failed to fetch order details'));
+        catchError(() => {
+          return throwError(
+            () =>
+              new Error(
+                'Echec pour récupérer le détail de commande pour client'
+              )
+          );
         })
       );
   }

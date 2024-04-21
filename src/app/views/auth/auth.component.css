@@ -19,15 +19,16 @@ button {
   letter-spacing: 1px;
 }
 
-button:active {
+.ghost:active {
   transform: scale(0.95);
 }
 
-button:focus {
+.ghost:focus {
   outline: none;
 }
 
-button.ghost {
+.ghost {
+  display: inline-block;
   background-color: transparent;
   border-color: #ffffff;
 }
